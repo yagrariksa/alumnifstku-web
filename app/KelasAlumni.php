@@ -1,0 +1,21 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class KelasAlumni extends Model
+{
+    protected $fillable = ['judul', 'kuota', 'tanggal', 'poster', 'deskripsi', 
+        'created_at', 'updated_at', 'user_id'];
+
+    public function uploader()
+    {
+        return $this->belongsTo('App\User', 'user_id', 'id');
+    }
+
+    public function dataAlumni()
+    {
+        return $this->hasMany('App\DataKelasAlumni', 'kelas_alumni_id', 'id');
+    }
+}
