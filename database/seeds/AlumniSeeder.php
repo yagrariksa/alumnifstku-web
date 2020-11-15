@@ -95,6 +95,7 @@ class AlumniSeeder extends Seeder
             $alumni->email = 'alumni'.$i.'@gmail.com';
             $alumni->username = 'alumni'.$i;
             $alumni->password = Hash::make('testing');
+            $alumni->token_registration = Str::random(50);
             $alumni->save();
     
             $bio = new BiodataAlumni();

@@ -19,8 +19,8 @@ class CreateBiodataAlumnisTable extends Migration
             $table->string('nama');
             $table->integer('angkatan');
             $table->string('jurusan');
-            $table->string('linkedin');
-            $table->string('foto');
+            $table->string('linkedin')->nullable();
+            $table->string('foto')->nullable();
             $table->timestamps();
 
             $table->foreign('alumni_id')->references('id')->on('alumnis')->onDelete('cascade')->onUpdate('cascade');

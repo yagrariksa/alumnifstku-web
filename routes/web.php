@@ -14,3 +14,4 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/registration/alumni/{token}', 'AccountController@verifyAlumni')->name('verify.alumni');

@@ -2,12 +2,15 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+// use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Alumni extends Model
+class Alumni extends Authenticatable
 {
-    protected $fillable = ['email', 'username'];
-    public $timestamps = false;
+    protected $fillable = ['email', 'username', 'password', 'token_registration', 'verified_at'];
+    protected $hidden = ['password'];    
 
     public function biodata()
     {
