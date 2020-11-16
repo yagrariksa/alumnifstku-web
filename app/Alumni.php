@@ -9,8 +9,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Alumni extends Authenticatable
 {
-    protected $fillable = ['email', 'username', 'password', 'token_registration', 'verified_at'];
-    protected $hidden = ['password'];    
+    protected $fillable = ['email', 'username', 'password', 'api_token', 'token_registration', 'verified_at'];
+    protected $hidden = ['password', 'token_registration'];    
 
     public function biodata()
     {

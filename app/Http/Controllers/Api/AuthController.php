@@ -67,6 +67,47 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'username' => 'required_without:email|string',
+                'email' => 'required_without:username|string|email',
+                'password' => 'required|min:6'
+            ]
+        );
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors(),
+                'data' => []
+            ], 404);
+        }
+
+        $alumni = Alumni::where('username', $request->username)
+                        ->orWhere('email', $request->email)
+                        ->first();
+                                
+        if (Hash::check($request->password, $alumni->password)) {
+            $alumni->api_token = Str::random(50);
+            $alumni->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Selamat datang :)',
+                'data' => $alumni,
+            ]);
+        }
+
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        
+    }
+
+    public function changePassword(Request $request)
+    {
         
     }
 }
