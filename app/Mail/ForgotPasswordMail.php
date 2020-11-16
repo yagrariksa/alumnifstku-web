@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class AccountVerificationMail extends Mailable
+class ForgotPasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,7 +17,7 @@ class AccountVerificationMail extends Mailable
      * @return void
      */
     public function __construct($data)
-    {        
+    {
         $this->data = $data;
     }
 
@@ -28,8 +28,8 @@ class AccountVerificationMail extends Mailable
      */
     public function build()
     {
-        return $this->view('email.registration')
-                    ->subject('Verifikasi Akun Alumni FST Anda')
+        return $this->view('email.forgot-password')
+                    ->subject('Konfirmasi Ubah Password')
                     ->with([
                         'data' => $this->data,
                     ]);

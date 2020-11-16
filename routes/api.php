@@ -20,5 +20,7 @@ Route::namespace('Api')->group(function() {
 
     Route::post('/register', 'AuthController@register')->name('register');
     Route::post('/login', 'AuthController@login')->name('login');
+    Route::post('/forgot', 'AuthController@forgotPassword')->name('forgot');
+    Route::post('/resend-verification', 'AuthController@resendVerification')->name('resend');
 });    
 

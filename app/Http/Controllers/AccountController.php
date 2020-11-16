@@ -11,14 +11,15 @@ use Illuminate\Support\Str;
 class AccountController extends Controller
 {
     public function verifyAlumni($token)
-    {
-        dd(Carbon::now());
-        $alumni = Alumni::where('token_registration', $token)->first();
-        
+    {        
+        $alumni = Alumni::where('token_registration', $token)->first();        
         
         if ($alumni) {
+            if ($alumni->verified_at) {
+                return view('email.successverified');
+            }
             // change registration token
-            $alumni->registration_token = Str::random(50);        
+            $alumni->token_registration = Str::random(50);        
             $alumni->verified_at = Carbon::now();
             $alumni->save();
             return view('email.successverified');
@@ -29,5 +30,10 @@ class AccountController extends Controller
     public function verifyAdmin($token)
     {
         
+    }
+
+    public function resetPassword($token)
+    {
+        return 'TODO : Create Reset Password Page Template!';
     }
 }
