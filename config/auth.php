@@ -44,7 +44,7 @@ return [
         'api' => [
             'driver' => 'token',
             'provider' => 'alumnis',
-            'hash' => true,
+            'hash' => false,
         ],
     ],
 

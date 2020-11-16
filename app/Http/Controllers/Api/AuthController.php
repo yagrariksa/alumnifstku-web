@@ -104,8 +104,9 @@ class AuthController extends Controller
                 ], 403);
             }
 
-            $alumni->api_token = hash(256, Str::random(80));
+            $alumni->api_token = hash('sha256', Str::random(80));
             $alumni->save();
+            $alumni->makeVisible(['api_token', 'username', 'verified_at']);
 
             return response()->json([
                 'success' => true,

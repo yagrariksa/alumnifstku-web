@@ -22,5 +22,11 @@ Route::namespace('Api')->group(function() {
     Route::post('/login', 'AuthController@login')->name('login');
     Route::post('/forgot', 'AuthController@forgotPassword')->name('forgot');
     Route::post('/resend-verification', 'AuthController@resendVerification')->name('resend');
+
+    // Remember to set Header Accept as application/json
+    Route::prefix('alumni')->middleware('auth:api')->group(function() {
+        Route::get('/', 'TracingAlumniController@list')->name('list');
+        Route::get('/{id}', 'TracingAlumniController@detail')->name('detail');
+    });
 });    
 
