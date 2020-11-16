@@ -17,6 +17,7 @@ class CreateTracingAlumnisTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('alumni_id')->unsigned();
             $table->string('perusahaan');
+            $table->string('cluster');
             $table->integer('tahun_masuk');
             $table->string('jabatan');
             $table->timestamps();

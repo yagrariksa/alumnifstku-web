@@ -43,11 +43,13 @@ class AlumniSeeder extends Seeder
                     'perusahaan' => 'Trydev',
                     'tahun_masuk' => '2017',
                     'jabatan' => 'Fullstack Developer',                
+                    'cluster' => 'Professional',                
                 ],
                 [
                     'perusahaan' => 'Tokopedia',
                     'tahun_masuk' => '2020',
                     'jabatan' => 'Data Analyst',                
+                    'cluster' => 'Professional',                
                 ],
             ],
             [
@@ -55,6 +57,7 @@ class AlumniSeeder extends Seeder
                     'perusahaan' => 'SevenQbits',
                     'tahun_masuk' => '2018',
                     'jabatan' => 'Manager',
+                    'cluster' => 'Professional',
                 ],
             ],
         ];
@@ -112,6 +115,7 @@ class AlumniSeeder extends Seeder
                 $tracing->perusahaan = $company[$i][0]['perusahaan'];
                 $tracing->tahun_masuk = $company[$i][0]['tahun_masuk'];
                 $tracing->jabatan = $company[$i][0]['jabatan'];  
+                $tracing->cluster = $company[$i][0]['cluster'];  
                 $tracing->alumni_id = $alumni->id;
                 $tracing->save();
 

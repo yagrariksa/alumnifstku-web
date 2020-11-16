@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class KomentarSharingAlumni extends Model
 {
-    protected $fillable = ['text', 'alumni_id', 'post_id'];
+    protected $fillable = [
+        'text', 
+        'alumni_id', 
+        'post_id', 
+        'created_at', 
+        'updated_at'
+    ];
 
     public function alumni()
     {

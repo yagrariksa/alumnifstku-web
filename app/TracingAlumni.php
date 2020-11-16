@@ -6,7 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class TracingAlumni extends Model
 {
-    protected $fillable = ['perusahaan', 'tahun_masuk', 'jabatan', 'alumni_id', 'created_at', 'updated_at'];
+    protected $fillable = [
+        'perusahaan', 
+        'tahun_masuk', 
+        'cluster', 
+        'jabatan', 
+        'alumni_id', 
+        'created_at', 
+        'updated_at'
+    ];
 
     public function alumni()
     {

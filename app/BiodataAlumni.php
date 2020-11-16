@@ -6,7 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class BiodataAlumni extends Model
 {
-    protected $fillable = ['nama', 'angkatan', 'jurusan', 'linkedin', 'foto', 'alumni_id'];
+    protected $fillable = [
+        'nama', 
+        'angkatan', 
+        'jurusan', 
+        'linkedin', 
+        'foto', 
+        'alumni_id', 
+        'created_at', 
+        'updated_at'];
 
     public function alumni()
     {

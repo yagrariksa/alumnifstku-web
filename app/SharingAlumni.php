@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class SharingAlumni extends Model
 {
-    protected $fillable = ['foto', 'deskripsi', 'alumni_id'];
+    protected $fillable = [
+        'foto', 
+        'deskripsi', 
+        'alumni_id', 
+        'created_at', 
+        'updated_at'
+    ];
 
     public function alumni()
     {
