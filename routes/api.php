@@ -33,5 +33,10 @@ Route::namespace('Api')->group(function() {
         Route::get('/', 'LokerController@list')->name('list');
         Route::get('/{id}', 'LokerController@detail')->name('detail');
     });
+
+    Route::prefix('news')->middleware('auth:api')->group(function() {
+        Route::get('/', 'NewsController@list')->name('list');
+        Route::get('/{id}', 'NewsController@detail')->name('detail');
+    });
 });    
 

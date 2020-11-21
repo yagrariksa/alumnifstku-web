@@ -58,6 +58,6 @@ class LokerController extends Controller
             'success' => true,
             'message' => 'Permintaan berhasil.',
             'data' => $loker->load('uploader')
-        ]);
+        ], 200);
     }
 }
