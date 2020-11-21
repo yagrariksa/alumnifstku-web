@@ -38,5 +38,13 @@ Route::namespace('Api')->group(function() {
         Route::get('/', 'NewsController@list')->name('list');
         Route::get('/{id}', 'NewsController@detail')->name('detail');
     });
+
+    Route::prefix('kelas')->middleware('auth:api')->group(function() {
+        Route::get('/', 'KelasAlumniController@list')->name('list');
+        Route::get('/{id}', 'KelasAlumniController@detail')->name('detail');
+        Route::get('/{id}/participants', 'KelasAlumniController@participants')->name('participants');
+        Route::post('/book', 'KelasAlumniController@booking')->name('book');
+        Route::post('/unbook', 'KelasAlumniController@unbook')->name('unbook');
+    });
 });    
 
