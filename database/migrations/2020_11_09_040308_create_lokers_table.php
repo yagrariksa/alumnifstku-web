@@ -21,6 +21,8 @@ class CreateLokersTable extends Migration
             $table->text('deskripsi');
             $table->string('poster')->nullable();
             $table->string('link')->nullable();
+            $table->string('cluster');
+            $table->string('jurusan');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

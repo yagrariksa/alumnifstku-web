@@ -37,6 +37,8 @@ class AdminSeeder extends Seeder
                 $loker->jabatan = 'Decision Scientist - Customer Analytics';
                 $loker->perusahaan = 'Gojek';
                 $loker->deskripsi = 'This role is for those who enjoy mining insights from the sea of data, building data products, and designing experiments with the ability to see the real-time impact of your contribution. You will get to work with insanely awesome and smart business leads and fellow analysts. Your work will impact how the senior leaders at Gojek shape strategies around millions of customers across South East Asia!';
+                $loker->cluster = 'Startup';
+                $loker->jurusan = 'Sistem Informasi, Statistika, Matematika';
                 $loker->link = 'https://www.linkedin.com/jobs/search/?currentJobId=2243927501&pivotType=jymbii';
                 $loker->user_id = $user->id;
                 $loker->save();
