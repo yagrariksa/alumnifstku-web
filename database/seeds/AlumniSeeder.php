@@ -99,12 +99,13 @@ class AlumniSeeder extends Seeder
             $alumni->username = 'alumni'.$i;
             $alumni->password = Hash::make('testing');
             $alumni->token_registration = Str::random(50);
+            $alumni->verified_at = Carbon::now();
             $alumni->save();
     
             $bio = new BiodataAlumni();
             $bio->nama = $data[$i]['nama'];
             $bio->angkatan = $data[$i]['angkatan'];
-            $bio->jurusan = $data[$i]['jurusan'];
+            $bio->jurusan = $data[$i]['jurusan'];            
             $bio->alumni_id = $alumni->id;
             $bio->linkedin = $data[$i]['linkedin'];
             $bio->foto = $data[$i]['foto'];

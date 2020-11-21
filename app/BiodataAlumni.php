@@ -10,6 +10,7 @@ class BiodataAlumni extends Model
         'nama', 
         'angkatan', 
         'jurusan', 
+        'cluster',
         'linkedin', 
         'foto', 
         'alumni_id', 

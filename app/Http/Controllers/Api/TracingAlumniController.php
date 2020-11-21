@@ -22,20 +22,30 @@ class TracingAlumniController extends Controller
         // filter function
         if ($request->filter) {
             $alumni->whereHas('biodata', function($query) use($request) {
+                // filter by name
                 if ($request->nama) {
                     $query->where('nama', 'like', '%'.$request->nama.'%');
                 }
+                // filter by angkatan
                 if ($request->angkatan) {
                     $query->where('angkatan', 'like', '%'.$request->angkatan.'%');
                 }
+                // filter by major
                 if ($request->jurusan) {
                     $query->where('jurusan', 'like', '%'.$request->jurusan.'%');
                 }
             });
             
+            // filter by company
             if ($request->perusahaan) {
                 $alumni->whereHas('tracing', function($query) use($request) {
                     $query->where('perusahaan', 'like', '%'.$request->perusahaan.'%');
+                });
+            }
+            // filter by job cluster
+            if ($request->cluster) {
+                $alumni->whereHas('tracing', function($query) use($request) {
+                    $query->where('cluster', 'like', '%'.$request->cluster.'%');
                 });
             }
         }        
