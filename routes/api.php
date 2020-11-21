@@ -28,5 +28,10 @@ Route::namespace('Api')->group(function() {
         Route::get('/', 'TracingAlumniController@list')->name('list');
         Route::get('/{id}', 'TracingAlumniController@detail')->name('detail');
     });
+
+    Route::prefix('loker')->middleware('auth:api')->group(function() {
+        Route::get('/', 'LokerController@list')->name('list');
+        Route::get('/{id}', 'LokerController@detail')->name('detail');
+    });
 });    
 
