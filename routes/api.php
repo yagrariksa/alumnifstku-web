@@ -45,6 +45,9 @@ Route::namespace('Api')->group(function() {
         Route::get('/{id}/participants', 'KelasAlumniController@participants')->name('participants');
         Route::post('/book', 'KelasAlumniController@booking')->name('book');
         Route::post('/unbook', 'KelasAlumniController@unbook')->name('unbook');
+        Route::post('/resend-ticket', 'KelasAlumniController@resendTicket')->name('resend-ticket');
+        // future update maybe?
+        // Route::post('/update-email', 'KelasAlumniController@updateEmailBooking')->name('resend-ticket');
     });
 });    
 
