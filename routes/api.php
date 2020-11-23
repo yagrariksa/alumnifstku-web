@@ -49,5 +49,21 @@ Route::namespace('Api')->group(function() {
         // future update maybe?
         // Route::post('/update-email', 'KelasAlumniController@updateEmailBooking')->name('resend-ticket');
     });
+
+    Route::prefix('sharing')->middleware('auth:api')->group(function() {
+        Rotue::get('/', 'SharingMemoryController@timeline')->name('timeline');
+        Rotue::get('/my', 'SharingMemoryController@myPost')->name('my');
+        Route::get('/{id}', 'SharingMemoryController@detail')->name('detail');
+        Route::post('/{id}/like', 'SharingMemoryController@like')->name('like');
+        Route::post('/{id}/unlike', 'SharingMemoryController@unlike')->name('unlike');
+        Route::prefix('/{id}/comment')->group(function() {
+            Rotue::get('/', 'SharingMemoryController@comments');
+            Route::post('/', 'SharingMemoryController@postComment')->name('post');
+            Route::post('/remove', 'SharingMemoryController@deleteComment')->name('remove');
+        });
+        Route::post('/', 'SharingMemoryController@postMemory')->name('post');
+        Route::post('/{id}/update', 'SharingMemoryController@updateMemory')->name('update');
+        Route::post('/{id}/remove', 'SharingMemoryController@removeMemory')->name('remove');
+    });
 });    
 

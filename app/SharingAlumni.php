@@ -28,4 +28,9 @@ class SharingAlumni extends Model
     {
         return $this->hasOne('App\Attribute', 'post_id', 'id');
     }
+
+    public function comment()
+    {
+        return $this->hasMany('App\KomentarSharingAlumni', 'post_id', 'id');
+    }
 }
