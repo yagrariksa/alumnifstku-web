@@ -65,5 +65,7 @@ Route::namespace('Api')->group(function() {
         Route::post('/{id}/update', 'SharingMemoryController@updateMemory')->name('update');
         Route::post('/{id}/remove', 'SharingMemoryController@removeMemory')->name('remove');
     });
+
+    Route::get('/pic', 'PictureController@show')->name('show');
 });    
 
