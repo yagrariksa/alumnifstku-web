@@ -17,7 +17,7 @@ class CreateSharingAlumnisTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('alumni_id')->unsigned();
             $table->string('foto');
-            $table->text('deskripsi');
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
 
             $table->foreign('alumni_id')->references('id')->on('alumnis')->onDelete('cascade')->onUpdate('cascade');

@@ -51,13 +51,13 @@ Route::namespace('Api')->group(function() {
     });
 
     Route::prefix('sharing')->middleware('auth:api')->group(function() {
-        Rotue::get('/', 'SharingMemoryController@timeline')->name('timeline');
-        Rotue::get('/my', 'SharingMemoryController@myPost')->name('my');
+        Route::get('/', 'SharingMemoryController@timeline')->name('timeline');
+        Route::get('/my', 'SharingMemoryController@myPost')->name('my');
         Route::get('/{id}', 'SharingMemoryController@detail')->name('detail');
         Route::post('/{id}/like', 'SharingMemoryController@like')->name('like');
         Route::post('/{id}/unlike', 'SharingMemoryController@unlike')->name('unlike');
         Route::prefix('/{id}/comment')->group(function() {
-            Rotue::get('/', 'SharingMemoryController@comments');
+            Route::get('/', 'SharingMemoryController@comments');
             Route::post('/', 'SharingMemoryController@postComment')->name('post');
             Route::post('/remove', 'SharingMemoryController@deleteComment')->name('remove');
         });

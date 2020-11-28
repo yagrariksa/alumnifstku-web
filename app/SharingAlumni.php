@@ -21,16 +21,16 @@ class SharingAlumni extends Model
 
     public function tag()
     {
-        return $this->hasOne('App\TagPost', 'post_id', 'id');
+        return $this->hasOne('App\TagPost', 'sharing_alumni_id', 'id');
     }
 
     public function attribute()
     {
-        return $this->hasOne('App\Attribute', 'post_id', 'id');
+        return $this->hasOne('App\PostAttribute', 'sharing_alumni_id', 'id');
     }
 
     public function comment()
     {
-        return $this->hasMany('App\KomentarSharingAlumni', 'post_id', 'id');
+        return $this->hasMany('App\KomentarSharingAlumni', 'sharing_alumni_id', 'id');
     }
 }
