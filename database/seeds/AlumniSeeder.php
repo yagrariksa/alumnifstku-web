@@ -126,11 +126,11 @@ class AlumniSeeder extends Seeder
                 $post->alumni_id = $alumni->id;
                 $post->save();
 
-                $attr = new PostAttribute();
-                $attr->like_count = 324;
-                $attr->comment_count = 2;
-                $attr->sharing_alumni_id = $post->id;
-                $attr->save();
+                // $attr = new PostAttribute();
+                // $attr->like_count = 324;
+                // $attr->comment_count = 2;
+                // $attr->sharing_alumni_id = $post->id;
+                // $attr->save();
 
                 if ($i == 0) {
                     $tag = new TagPost();
