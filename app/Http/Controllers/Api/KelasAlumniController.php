@@ -12,6 +12,7 @@ use App\Alumni;
 use App\Mail\TicketMail;
 use Carbon\Carbon;
 use Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class KelasAlumniController extends Controller
 {
@@ -49,12 +50,15 @@ class KelasAlumniController extends Controller
 
     public function detail($id)
     {
-        $kelas = KelasAlumni::find($id)->first();
-
+        try {
+            $kelas = KelasAlumni::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            $kelas = null;
+        }        
         if (!$kelas) {
             return response()->json([
                 'success' => false,
-                'message' => 'ID tidak ditemukan!',
+                'message' => 'ID Kelas tidak ditemukan!',
                 'data' => []
             ], 404);
         }
@@ -66,11 +70,9 @@ class KelasAlumniController extends Controller
         ], 200);
     }
 
-    public function booking(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'kelas_alumni_id' => 'required|integer',
-            'alumni_id' => 'required|integer',
+    public function booking(Request $request, $id)
+    {        
+        $validator = Validator::make($request->all(), [            
             'email' => 'required|email',
             'nama_lengkap' => 'required|string',
             'whatsapp' => 'required|min:11|max:13|string'
@@ -84,7 +86,11 @@ class KelasAlumniController extends Controller
             ], 400);
         }
 
-        $kelas = KelasAlumni::find($request->kelas_alumni_id)->first();
+        try {
+            $kelas = KelasAlumni::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            $kelas = null;
+        }        
         if (!$kelas) {
             return response()->json([
                 'success' => false,
@@ -93,7 +99,9 @@ class KelasAlumniController extends Controller
             ], 404);
         }
 
-        $alumni = Alumni::find($request->alumni_id)->first();
+        $user = auth()->user();
+
+        $alumni = Alumni::find($user->id)->first();
         if (!$alumni) {
             return response()->json([
                 'success' => false,
@@ -115,8 +123,8 @@ class KelasAlumniController extends Controller
         }
 
         $booking = BookingKelas::create([
-            'kelas_alumni_id' => $request->kelas_alumni_id,
-            'alumni_id' => $request->alumni_id,
+            'kelas_alumni_id' => $id,
+            'alumni_id' => $user->id,
             'email' => $request->email,
             'nama_lengkap' => $request->nama_lengkap,
             'whatsapp' => $request->whatsapp
@@ -147,21 +155,12 @@ class KelasAlumniController extends Controller
         }
     }
 
-    public function unbook(Request $request)
+    public function unbook($id)
     {
-        $validator = Validator::make($request->all(), [
-            'alumni_id' => 'required|integer'
-        ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors(),
-                'data' => []
-            ], 404);
-        }
+        $user = auth()->user();
 
-        $alumni = Alumni::find($request->alumni_id)->first();
+        $alumni = Alumni::find($user->id)->first();
         if (!$alumni) {
             return response()->json([
                 'success' => false,
@@ -170,7 +169,22 @@ class KelasAlumniController extends Controller
             ], 404);
         }
 
-        $booking = BookingKelas::where('alumni_id', $request->alumni_id)->first();
+        try {
+            $kelas = KelasAlumni::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            $kelas = null;
+        }        
+        if (!$kelas) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID Kelas tidak ditemukan!',
+                'data' => []
+            ], 404);
+        }
+
+        $booking = BookingKelas::where('kelas_alumni_id', $kelas->id)
+                               ->where('alumni_id', $user->id)
+                               ->first();        
         if (!$booking) {
             return response()->json([
                 'success' => false,
@@ -205,21 +219,12 @@ class KelasAlumniController extends Controller
         ], 200);
     }
 
-    public function resendTicket(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'alumni_id' => 'required|integer'
-        ]);
+    public function resendTicket($id)
+    {        
 
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors(),
-                'data' => []
-            ], 400);
-        }
+        $user = auth()->user();
 
-        $alumni = Alumni::find($request->alumni_id)->first();        
+        $alumni = Alumni::find($user->id)->first();        
         if (!$alumni) {
             return response()->json([
                 'success' => false,
@@ -228,11 +233,26 @@ class KelasAlumniController extends Controller
             ], 404);
         }
 
-        $booking = BookingKelas::where('alumni_id', $request->alumni_id)->first();
+        try {
+            $kelas = KelasAlumni::findOrFail($id);
+        } catch (ModelNotFoundException $e) {
+            $kelas = null;
+        }        
+        if (!$kelas) {
+            return response()->json([
+                'success' => false,
+                'message' => 'ID Kelas tidak ditemukan!',
+                'data' => []
+            ], 404);
+        }
+
+        $booking = BookingKelas::where('kelas_alumni_id', $kelas->id)
+                               ->where('alumni_id', $user->id)
+                               ->first();        
         if (!$booking) {
             return response()->json([
                 'success' => false,
-                'message' => 'Anda belum terdaftar pada Kelas Alumni ini.',
+                'message' => 'Anda tidak terdaftar pada kelas ini.',
                 'data' => []
             ], 400);
         }
