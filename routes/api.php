@@ -59,7 +59,7 @@ Route::namespace('Api')->group(function() {
         Route::prefix('/{id}/comment')->group(function() {
             Route::get('/', 'SharingMemoryController@comments');
             Route::post('/', 'SharingMemoryController@postComment')->name('post');
-            Route::post('/remove', 'SharingMemoryController@deleteComment')->name('remove');
+            Route::post('/remove/{commentId}', 'SharingMemoryController@removeComment')->name('remove');
         });
         Route::post('/', 'SharingMemoryController@postMemory')->name('post');
         Route::post('/{id}/update', 'SharingMemoryController@updateMemory')->name('update');

@@ -105,12 +105,45 @@ class SharingMemoryController extends Controller
         
     }
 
-    public function removeMemory(Request $request, $id)
+    public function removeMemory($id)
     {
-        
+        $post = SharingAlumni::find($id);
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Posting tidak ditemukan.',
+                'data' => []
+            ], 404);
+        }
+
+        /* remove file first */
+        $filename = explode('=',$post->foto)[1];            
+        Storage::delete($filename);
+
+        $post->delete();
+        return response()->json([
+            'success' => false,
+            'message' => 'Posting anda berhasil dihapus.',
+            'data' => []
+        ], 200);
+
     }
 
-    public function timeline(Request $request)
+    public function myPost()
+    {
+        $post = SharingAlumni::where('alumni_id', auth()->user()->id)
+                             ->with(['alumni', 'tag', 'likes', 'comment'])
+                             ->orderBy('created_at', 'desc')
+                             ->get();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'Permintaan anda berhasil.',
+            'data' => $post
+        ], 200);
+    }
+
+    public function timeline()
     {
         $sharing = SharingAlumni::with(['alumni', 'tag', 'likes', 'comment'])
                                 ->orderBy('created_at', 'desc')
@@ -141,19 +174,8 @@ class SharingMemoryController extends Controller
         ]);
     }
 
-    public function like(Request $request, $id)
-    {        
-        $validator = Validator::make($request->all(), [
-            'alumni_id' => 'required|integer'
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors(),
-                'data' => []
-            ], 400);
-        }
+    public function like($id)
+    {
 
         $post = SharingAlumni::find($id);
         if (!$post) {
@@ -163,19 +185,10 @@ class SharingMemoryController extends Controller
                 'data' => []
             ], 404);
         }
-
-        $alumni = Alumni::find($request->alumni_id);
-        if (!$alumni) {
-            return response()->json([
-                'success' => false,
-                'message' => 'User tidak ditemukan.',
-                'data' => []
-            ], 404);
-        }
-
+        
         $attr = PostLike::create([
             'sharing_alumni_id' => $id,
-            'alumni_id' => $request->alumni_id
+            'alumni_id' => auth()->user()->id
         ]);
 
         return response()->json([
@@ -185,7 +198,7 @@ class SharingMemoryController extends Controller
         ], 201);
     }
 
-    public function unlike(Request $request, $id)
+    public function unlike($id)
     {
         $post = SharingAlumni::find($id);
         if (!$post) {
@@ -194,18 +207,9 @@ class SharingMemoryController extends Controller
                 'message' => 'Posting tidak ditemukan.',
                 'data' => []
             ], 404);
-        }
+        }        
 
-        $alumni = Alumni::find($request->alumni_id);
-        if (!$alumni) {
-            return response()->json([
-                'success' => false,
-                'message' => 'User tidak ditemukan.',
-                'data' => []
-            ], 404);
-        }
-
-        $attr = PostLike::where('sharing_alumni_id', $id)->where('alumni_id', $request->alumni_id)->first();
+        $attr = PostLike::where('sharing_alumni_id', $id)->where('alumni_id', auth()->user()->id)->first();
         if (!$attr) {
             return response()->json([
                 'success' => false,
@@ -220,5 +224,104 @@ class SharingMemoryController extends Controller
             'message' => 'Permintaan anda berhasil.',
             'data' => $post->load(['alumni', 'tag', 'likes', 'comment'])
         ], 200);
+    }
+
+    public function comments($id)
+    {
+        $post = SharingAlumni::find($id);
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Posting tidak ditemukan.',
+                'data' => []
+            ], 404);
+        }        
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Permintaan anda berhasil.',
+            'data' => $post->comment
+        ], 200);
+    }
+
+    public function postComment(Request $request, $id)
+    {
+        $post = SharingAlumni::find($id);
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Posting tidak ditemukan.',
+                'data' => []
+            ], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'text' => 'required|string|max:255',            
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors(),
+                'data' => []
+            ], 400);
+        }
+
+        $comment = KomentarSharingAlumni::create([
+            'alumni_id' => auth()->user()->id,
+            'sharing_alumni_id' => $post->id,
+            'text' => $request->text
+        ]);
+
+        if ($comment) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Komentar anda berhasil ditambahkan.',
+                'data' => $post->comment
+            ], 201);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Komentar anda gagal ditambahkan.',
+            'data' => []
+        ], 400);
+    }
+
+    public function removeComment($id, $commentId)
+    {
+        $post = SharingAlumni::find($id);
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Posting tidak ditemukan.',
+                'data' => []
+            ], 404);
+        }
+
+        $comment = KomentarSharingAlumni::find($commentId);
+        if (!$comment) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Komentar tidak ditemukan.',
+                'data' => []
+            ], 404);
+        }
+
+        if ($comment->alumni_id == auth()->user()->id || $post->alumni_id == auth()->user()->id) {
+            $comment->delete();
+            return response()->json([
+                'success' => true,
+                'message' => 'Komentar berhasil dihapus.',
+                'data' => $post->comment
+            ], 200);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Anda tidak berhak melakukan operasi ini.',
+            'data' => []
+        ], 403);
+
     }
 }
