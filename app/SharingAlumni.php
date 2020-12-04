@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class SharingAlumni extends Model
 {
-    protected $fillable = ['foto', 'deskripsi', 'alumni_id'];
+    protected $fillable = [
+        'foto', 
+        'deskripsi', 
+        'alumni_id', 
+        'created_at', 
+        'updated_at'
+    ];
 
     public function alumni()
     {
@@ -15,11 +21,16 @@ class SharingAlumni extends Model
 
     public function tag()
     {
-        return $this->hasOne('App\TagPost', 'post_id', 'id');
+        return $this->hasOne('App\TagPost', 'sharing_alumni_id', 'id');
     }
 
-    public function attribute()
+    public function likes()
     {
-        return $this->hasOne('App\Attribute', 'post_id', 'id');
+        return $this->hasMany('App\PostLike', 'sharing_alumni_id', 'id');
+    }
+
+    public function comment()
+    {
+        return $this->hasMany('App\KomentarSharingAlumni', 'sharing_alumni_id', 'id');
     }
 }

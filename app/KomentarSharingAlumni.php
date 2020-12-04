@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class KomentarSharingAlumni extends Model
 {
-    protected $fillable = ['text', 'alumni_id', 'post_id'];
+    protected $fillable = [
+        'text', 
+        'alumni_id', 
+        'sharing_alumni_id', 
+        'created_at', 
+        'updated_at'
+    ];
 
     public function alumni()
     {
@@ -15,6 +21,6 @@ class KomentarSharingAlumni extends Model
 
     public function post()
     {
-        return $this->belongsTo('App\SharingAlumni', 'post_id', 'id');
+        return $this->belongsTo('App\SharingAlumni', 'sharing_alumni_id', 'id');
     }
 }

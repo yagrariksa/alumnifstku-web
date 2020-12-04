@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Loker extends Model
 {
     protected $fillable = ['judul', 'perusahaan', 'deskripsi', 'poster', 
-        'link', 'created_at', 'updated_at'];
+        'link', 'cluster', 'jurusan', 'created_at', 'updated_at'];
 
     public function uploader()
     {

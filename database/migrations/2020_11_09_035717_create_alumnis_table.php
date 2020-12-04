@@ -18,7 +18,10 @@ class CreateAlumnisTable extends Migration
             $table->string('email')->unique();
             $table->string('username')->unique();
             $table->string('password');
-            // $table->timestamps();
+            $table->string('token_registration');
+            $table->string('api_token')->nullable();
+            $table->timestamps();
+            $table->timestamp('verified_at')->nullable();
         });
     }
 

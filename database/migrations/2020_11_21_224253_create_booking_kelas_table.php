@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTracingAlumnisTable extends Migration
+class CreateBookingKelasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,16 @@ class CreateTracingAlumnisTable extends Migration
      */
     public function up()
     {
-        Schema::create('tracing_alumnis', function (Blueprint $table) {
+        Schema::create('booking_kelas', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('kelas_alumni_id')->unsigned();
             $table->bigInteger('alumni_id')->unsigned();
-            $table->string('perusahaan');
-            $table->string('cluster');
-            $table->integer('tahun_masuk');
-            $table->string('jabatan');
+            $table->string('email');
+            $table->string('nama_lengkap');
+            $table->string('whatsapp');            
             $table->timestamps();
 
+            $table->foreign('kelas_alumni_id')->references('id')->on('kelas_alumnis')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('alumni_id')->references('id')->on('alumnis')->onDelete('cascade')->onUpdate('cascade');
         });
     }
@@ -33,6 +34,6 @@ class CreateTracingAlumnisTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tracing_alumnis');
+        Schema::dropIfExists('booking_kelas');
     }
 }

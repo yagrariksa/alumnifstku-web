@@ -43,11 +43,13 @@ class AlumniSeeder extends Seeder
                     'perusahaan' => 'Trydev',
                     'tahun_masuk' => '2017',
                     'jabatan' => 'Fullstack Developer',                
+                    'cluster' => 'Professional',                
                 ],
                 [
                     'perusahaan' => 'Tokopedia',
                     'tahun_masuk' => '2020',
                     'jabatan' => 'Data Analyst',                
+                    'cluster' => 'Professional',                
                 ],
             ],
             [
@@ -55,6 +57,7 @@ class AlumniSeeder extends Seeder
                     'perusahaan' => 'SevenQbits',
                     'tahun_masuk' => '2018',
                     'jabatan' => 'Manager',
+                    'cluster' => 'Professional',
                 ],
             ],
         ];
@@ -95,12 +98,14 @@ class AlumniSeeder extends Seeder
             $alumni->email = 'alumni'.$i.'@gmail.com';
             $alumni->username = 'alumni'.$i;
             $alumni->password = Hash::make('testing');
+            $alumni->token_registration = Str::random(50);
+            $alumni->verified_at = Carbon::now();
             $alumni->save();
     
             $bio = new BiodataAlumni();
             $bio->nama = $data[$i]['nama'];
             $bio->angkatan = $data[$i]['angkatan'];
-            $bio->jurusan = $data[$i]['jurusan'];
+            $bio->jurusan = $data[$i]['jurusan'];            
             $bio->alumni_id = $alumni->id;
             $bio->linkedin = $data[$i]['linkedin'];
             $bio->foto = $data[$i]['foto'];
@@ -111,6 +116,7 @@ class AlumniSeeder extends Seeder
                 $tracing->perusahaan = $company[$i][0]['perusahaan'];
                 $tracing->tahun_masuk = $company[$i][0]['tahun_masuk'];
                 $tracing->jabatan = $company[$i][0]['jabatan'];  
+                $tracing->cluster = $company[$i][0]['cluster'];  
                 $tracing->alumni_id = $alumni->id;
                 $tracing->save();
 
@@ -120,11 +126,11 @@ class AlumniSeeder extends Seeder
                 $post->alumni_id = $alumni->id;
                 $post->save();
 
-                $attr = new PostAttribute();
-                $attr->like_count = 324;
-                $attr->comment_count = 2;
-                $attr->sharing_alumni_id = $post->id;
-                $attr->save();
+                // $attr = new PostAttribute();
+                // $attr->like_count = 324;
+                // $attr->comment_count = 2;
+                // $attr->sharing_alumni_id = $post->id;
+                // $attr->save();
 
                 if ($i == 0) {
                     $tag = new TagPost();

@@ -14,8 +14,14 @@ class KelasAlumni extends Model
         return $this->belongsTo('App\User', 'user_id', 'id');
     }
 
-    public function dataAlumni()
+    public function dataSpeaker()
     {
         return $this->hasMany('App\DataKelasAlumni', 'kelas_alumni_id', 'id');
     }
+
+    public function participants()
+    {
+        return $this->hasMany('App\BookingKelas', 'alumni_id', 'id');
+    }
+
 }
