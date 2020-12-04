@@ -215,7 +215,7 @@ class KelasAlumniController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Permintaan berhasil.',
-            'data' => $kelas->load(['participants'])
+            'data' => $kelas->participants
         ], 200);
     }
 

@@ -11,9 +11,11 @@ use Illuminate\Support\Facades\Mail;
 use App\Alumni;
 use App\Mail\AccountVerificationMail;
 use App\Mail\ForgotPasswordMail;
+use App\Helpers\MergeErrorMsg;
 
 class AuthController extends Controller
-{
+{    
+    
     public function register(Request $request)
     {
         $validator = Validator::make(
@@ -26,9 +28,10 @@ class AuthController extends Controller
         );
 
         if ($validator->fails()) {
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors(),
+                'message' => $msg,
                 'data' => []
             ], 404);
         }
@@ -78,9 +81,10 @@ class AuthController extends Controller
         );
 
         if ($validator->fails()) {
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors(),
+                'message' => $msg,
                 'data' => []
             ], 404);
         }
@@ -141,12 +145,15 @@ class AuthController extends Controller
             'username' => 'required_without:email|string'
         ]);
 
-        if ($validator->fails()) {
+        
+        if ($validator->fails()) {            
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
+            
             return response()->json([
                 'success' => false,
-                'message' => $validator->fails(),
+                'message' => $msg,
                 'data' => []
-            ]);
+            ], 400);
         }
 
         $alumni = Alumni::where('email', $request->email)
@@ -187,9 +194,10 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
             return response()->json([
                 'success' => false,
-                'message' => $validator->fails(),
+                'message' => $msg,
                 'data' => []
             ]);
         }
@@ -234,5 +242,19 @@ class AuthController extends Controller
     public function changePassword(Request $request)
     {
         
+    }
+
+    /**
+     * For combine error message generated
+     * from validator->errors()
+     */
+    private function mergeErrorMsg($msg) {
+        $result = [];
+        foreach ($msg as $err) {            
+            foreach ($err as $e) {
+                array_push($result, $e);
+            }
+        }
+        return implode('\n', $result);
     }
 }

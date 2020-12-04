@@ -21,7 +21,7 @@ class NewsController extends Controller
         }
 
         // order function
-        $oder = 'desc';     // default ordering
+        $order = 'desc';     // default ordering
         if ($request->order) {
             $order = $request->order;
         }
