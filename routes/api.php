@@ -24,6 +24,8 @@ Route::namespace('Api')->group(function() {
     Route::post('/resend-verification', 'AuthController@resendVerification')->name('resend');
 
     // Remember to set Header Accept as application/json
+    Route::get('/me/hasVerified', 'AuthController@hasVerified')->middleware('auth:api')->name('hasVerified');
+
     Route::prefix('alumni')->middleware('auth:api')->group(function() {
         Route::get('/', 'TracingAlumniController@list')->name('list');
         Route::get('/{id}', 'TracingAlumniController@detail')->name('detail');

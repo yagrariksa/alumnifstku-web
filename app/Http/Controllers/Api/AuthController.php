@@ -37,7 +37,8 @@ class AuthController extends Controller
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'token_registration' => Str::random(50),            
+            'token_registration' => Str::random(50),
+            'api_token' => hash('sha256', Str::random(80))
         ]);
 
         if ($alumni) {            
@@ -54,7 +55,7 @@ class AuthController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Pendaftaran Berhasil! Cek email anda untuk verifikasi akun.',
-                'data' => $alumni,
+                'data' => $alumni->makeVisible(['api_token', 'username']),
             ], 201);
         } else {
             return response()->json([
@@ -96,13 +97,13 @@ class AuthController extends Controller
             ], 404);
         }
         if (Hash::check($request->password, $alumni->password)) {
-            if (!$alumni->verified_at) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Anda belum melakukan verifikasi akun. Silakan verifikasi terlebih dahulu, atau kirim ulang email verifikasi.',
-                    'data' => []
-                ], 403);
-            }
+            // if (!$alumni->verified_at) {
+            //     return response()->json([
+            //         'success' => false,
+            //         'message' => 'Anda belum melakukan verifikasi akun. Silakan verifikasi terlebih dahulu, atau kirim ulang email verifikasi.',
+            //         'data' => []
+            //     ], 403);
+            // }
 
             $alumni->api_token = hash('sha256', Str::random(80));
             $alumni->save();
@@ -120,7 +121,17 @@ class AuthController extends Controller
                 'data' => []
             ], 403);
         }
+    }
 
+    public function hasVerified()
+    {
+        $alumni = Alumni::find(auth()->user()->id);
+
+        if ($alumni->verified_at) {
+            return response()->json(true);
+        } else {
+            return response()->json(false);
+        }
     }
 
     public function forgotPassword(Request $request)
