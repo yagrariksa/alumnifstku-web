@@ -9,6 +9,10 @@ class BiodataAlumni extends Model
     protected $fillable = [
         'nama', 
         'angkatan', 
+        'alamat', 
+        'umur', 
+        'jenis_kelamin', 
+        'ttl',          
         'jurusan', 
         'cluster',
         'linkedin', 

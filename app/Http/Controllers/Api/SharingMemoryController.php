@@ -24,9 +24,10 @@ class SharingMemoryController extends Controller
         ]);
 
         if ($validator->fails()) {
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors(),
+                'message' => $msg,
                 'data' => []
             ], 400);
         }
@@ -72,9 +73,10 @@ class SharingMemoryController extends Controller
         ]);
 
         if ($validator->fails()) {
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors(),
+                'message' => $msg,
                 'data' => []
             ], 400);
         }
@@ -122,7 +124,7 @@ class SharingMemoryController extends Controller
 
         $post->delete();
         return response()->json([
-            'success' => false,
+            'success' => true,
             'message' => 'Posting anda berhasil dihapus.',
             'data' => []
         ], 200);
@@ -145,7 +147,7 @@ class SharingMemoryController extends Controller
 
     public function timeline()
     {
-        $sharing = SharingAlumni::with(['alumni', 'tag', 'likes', 'comment'])
+        $sharing = SharingAlumni::with(['alumni', 'tag', 'likes', 'comment', 'alumni.biodata'])
                                 ->orderBy('created_at', 'desc')
                                 ->get();
 
@@ -170,13 +172,19 @@ class SharingMemoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Permintaan anda berhasil.',
-            'data' => $post->load(['alumni', 'tag', 'likes', 'comment'])
-        ]);
+            'data' => $post->load([
+                'alumni', 
+                'tag', 
+                'likes', 
+                'comment' => function($query) {
+                    $query->orderBy('created_at', 'desc');
+                }, 
+                'alumni.biodata'])
+        ], 200);
     }
 
     public function like($id)
     {
-
         $post = SharingAlumni::find($id);
         if (!$post) {
             return response()->json([
@@ -194,7 +202,15 @@ class SharingMemoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Permintaan anda berhasil.',
-            'data' => $post->load(['alumni', 'tag', 'likes', 'comment'])
+            'data' => $post->load([
+                'alumni', 
+                'tag', 
+                'likes', 
+                'comment' => function($query) {
+                    $query->orderBy('created_at', 'desc');
+                }, 
+                'alumni.biodata'
+            ])
         ], 201);
     }
 
@@ -222,13 +238,23 @@ class SharingMemoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Permintaan anda berhasil.',
-            'data' => $post->load(['alumni', 'tag', 'likes', 'comment'])
+            'data' => $post->load([
+                'alumni', 
+                'tag', 
+                'likes', 
+                'comment' => function($query) {
+                    $query->orderBy('created_at', 'desc');
+                }, 
+                'alumni.biodata'])
         ], 200);
     }
 
     public function comments($id)
     {
-        $post = SharingAlumni::find($id);
+        $post = SharingAlumni::with(['comment' => function($query) {
+            $query->orderBy('created_at', 'desc');
+        }])->find($id);
+
         if (!$post) {
             return response()->json([
                 'success' => false,
@@ -240,13 +266,15 @@ class SharingMemoryController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Permintaan anda berhasil.',
-            'data' => $post->comment
+            'data' => $post->comment->load(['alumni', 'alumni.biodata'])
         ], 200);
     }
 
     public function postComment(Request $request, $id)
     {
-        $post = SharingAlumni::find($id);
+        $post = SharingAlumni::with(['comment' => function($query) {
+            $query->orderBy('created_at', 'desc');
+        }])->find($id);
         if (!$post) {
             return response()->json([
                 'success' => false,
@@ -260,9 +288,10 @@ class SharingMemoryController extends Controller
         ]);
 
         if ($validator->fails()) {
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors(),
+                'message' => $msg,
                 'data' => []
             ], 400);
         }
@@ -277,7 +306,7 @@ class SharingMemoryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Komentar anda berhasil ditambahkan.',
-                'data' => $post->comment
+                'data' => $post->comment->load(['alumni', 'alumni.biodata'])
             ], 201);
         }
 
@@ -290,7 +319,9 @@ class SharingMemoryController extends Controller
 
     public function removeComment($id, $commentId)
     {
-        $post = SharingAlumni::find($id);
+        $post = SharingAlumni::with(['comment' => function($query) {
+            $query->orderBy('created_at', 'desc');
+        }])->find($id);
         if (!$post) {
             return response()->json([
                 'success' => false,
@@ -313,7 +344,7 @@ class SharingMemoryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Komentar berhasil dihapus.',
-                'data' => $post->comment
+                'data' => $post->comment->load(['alumni', 'alumni.biodata'])
             ], 200);
         }
 
@@ -323,5 +354,19 @@ class SharingMemoryController extends Controller
             'data' => []
         ], 403);
 
+    }
+
+    /**
+     * For combine error message generated
+     * from validator->errors()
+     */
+    private function mergeErrorMsg($msg) {
+        $result = [];
+        foreach ($msg as $err) {            
+            foreach ($err as $e) {
+                array_push($result, $e);
+            }
+        }
+        return implode('\n', $result);
     }
 }

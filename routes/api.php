@@ -29,11 +29,15 @@ Route::namespace('Api')->group(function() {
     Route::prefix('alumni')->middleware('auth:api')->group(function() {
         Route::get('/', 'TracingAlumniController@list')->name('list');
         Route::get('/{id}', 'TracingAlumniController@detail')->name('detail');
+        Route::post('/tracing/create', 'TracingAlumniController@create')->name('create');
+        Route::post('/tracing/{id}/update', 'TracingAlumniController@update')->name('update');
+        Route::post('/tracing/{id}/remove', 'TracingAlumniController@remove')->name('remove');
     });
 
     Route::prefix('biodata')->middleware('auth:api')->group(function() {
         Route::get('/my', 'BiodataAlumniController@my')->name('my');
         Route::post('/create', 'BiodataAlumniController@create')->name('create');
+        Route::post('/create-with-tracing', 'BiodataAlumniController@createBioAndTracing')->name('create-with-tracing');
         Route::post('/update', 'BiodataAlumniController@update')->name('udpate');
     });
 

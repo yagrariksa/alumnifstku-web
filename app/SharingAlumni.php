@@ -21,7 +21,7 @@ class SharingAlumni extends Model
 
     public function tag()
     {
-        return $this->hasOne('App\TagPost', 'sharing_alumni_id', 'id');
+        return $this->hasMany('App\TagPost', 'sharing_alumni_id', 'id');
     }
 
     public function likes()

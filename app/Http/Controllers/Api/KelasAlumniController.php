@@ -79,9 +79,10 @@ class KelasAlumniController extends Controller
         ]);
 
         if ($validator->fails()) {
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors(),
+                'message' => $msg,
                 'data' => []
             ], 400);
         }
@@ -279,6 +280,20 @@ class KelasAlumniController extends Controller
     public function updateEmailBooking(Request $request)
     {
         
+    }
+
+    /**
+     * For combine error message generated
+     * from validator->errors()
+     */
+    private function mergeErrorMsg($msg) {
+        $result = [];
+        foreach ($msg as $err) {            
+            foreach ($err as $e) {
+                array_push($result, $e);
+            }
+        }
+        return implode('\n', $result);
     }
 
 }
