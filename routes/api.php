@@ -22,6 +22,9 @@ Route::namespace('Api')->group(function() {
     Route::post('/login', 'AuthController@login')->name('login');
     Route::post('/forgot', 'AuthController@forgotPassword')->name('forgot');
     Route::post('/resend-verification', 'AuthController@resendVerification')->name('resend');
+    Route::middleware('auth:api')->group(function() {
+        Route::post('/change-password', 'AuthController@changePassword')->name('changePassword');
+    });
 
     // Remember to set Header Accept as application/json
     Route::get('/me/hasVerified', 'AuthController@hasVerified')->middleware('auth:api')->name('hasVerified');

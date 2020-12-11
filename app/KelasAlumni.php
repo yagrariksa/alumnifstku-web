@@ -21,7 +21,7 @@ class KelasAlumni extends Model
 
     public function participants()
     {
-        return $this->hasMany('App\BookingKelas', 'alumni_id', 'id');
+        return $this->hasMany('App\BookingKelas', 'kelas_alumni_id', 'id');
     }
 
 }

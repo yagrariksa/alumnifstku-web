@@ -179,8 +179,12 @@ class BiodataAlumniController extends Controller
             ], 404);
         }
 
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [            
             'nama' => 'required|string',
+            'alamat' => 'required|string',
+            'umur' => 'required|integer',
+            'ttl' => 'required|string',
+            'jenis_kelamin' => 'required|string',
             'angkatan' => 'required|string',
             'jurusan' => 'required|string',
             'linkedin' => 'url',
@@ -199,9 +203,11 @@ class BiodataAlumniController extends Controller
         $url;
         if ($request->hasFile('foto')) {
 
-            /* remove old files first */
-            $filename = explode('=',$biodata->foto)[1];            
-            Storage::delete($filename);
+            if ($biodata->foto != null) {
+                /* remove old files first */
+                $filename = explode('=',$biodata->foto)[1];            
+                Storage::delete($filename);
+            }
             
             $url = Storage::put('/',$request->foto); 
             $biodata->update([
@@ -212,6 +218,26 @@ class BiodataAlumniController extends Controller
         if ($request->nama != $biodata->nama) {
             $biodata->update([
                 'nama' => $request->nama
+            ]);
+        }
+        if ($request->alamat != $biodata->alamat) {
+            $biodata->update([
+                'alamat' => $request->alamat
+            ]);
+        }
+        if ($request->umur != $biodata->umur) {
+            $biodata->update([
+                'umur' => $request->umur
+            ]);
+        }
+        if ($request->ttl != $biodata->ttl) {
+            $biodata->update([
+                'ttl' => $request->ttl
+            ]);
+        }
+        if ($request->jenis_kelamin != $biodata->jenis_kelamin) {
+            $biodata->update([
+                'jenis_kelamin' => $request->jenis_kelamin
             ]);
         }
         if ($request->angkatan != $biodata->angkatan) {
@@ -228,7 +254,7 @@ class BiodataAlumniController extends Controller
             $biodata->update([
                 'linkedin' => $request->linkedin
             ]);
-        }
+        }        
 
         return response()->json([
             'success' => true,
