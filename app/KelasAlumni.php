@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class KelasAlumni extends Model
 {
-    protected $fillable = ['judul', 'kuota', 'tanggal', 'poster', 'deskripsi', 
+    protected $fillable = ['judul', 'kuota', 'tanggal', 'poster', 'deskripsi', 'kategori',
         'created_at', 'updated_at', 'user_id'];
 
     public function uploader()

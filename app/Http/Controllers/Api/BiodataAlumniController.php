@@ -98,7 +98,7 @@ class BiodataAlumniController extends Controller
             'jenis_kelamin' => 'required|string',
             'angkatan' => 'required|string',
             'jurusan' => 'required|string',
-            'linkedin' => 'url',
+            'linkedin' => 'string',
             'foto' => 'image|max:2048',
             'perusahaan' => 'required|string',
             'tahun_masuk' => 'required|string',
