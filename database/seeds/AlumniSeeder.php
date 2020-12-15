@@ -24,6 +24,7 @@ class AlumniSeeder extends Seeder
             [
                 'nama' => 'Affandy Fahrizain',
                 'alamat' => 'indonesia',
+                'kota_domisili' => 'Jogja',
                 'umur' => 22,
                 'ttl' => 'Surabaya, 24 Desember 1998',
                 'jenis_kelamin' => 'laki-laki',                
@@ -35,6 +36,7 @@ class AlumniSeeder extends Seeder
             [
                 'nama' => 'Reinaldy Subiakto',
                 'alamat' => 'indonesia',
+                'kota_domisili' => 'Sidoarjo',
                 'umur' => 22,
                 'ttl' => 'Sidoarjo, 22 Maret 1992',
                 'jenis_kelamin' => 'laki-laki',                
@@ -113,6 +115,7 @@ class AlumniSeeder extends Seeder
             $bio = new BiodataAlumni();
             $bio->nama = $data[$i]['nama'];
             $bio->alamat = $data[$i]['alamat'];
+            $bio->kota_domisili = $data[$i]['kota_domisili'];
             $bio->umur = $data[$i]['umur'];
             $bio->ttl = $data[$i]['ttl'];
             $bio->jenis_kelamin = $data[$i]['jenis_kelamin'];

@@ -41,7 +41,7 @@ class AdminSeeder extends Seeder
                 $loker->jurusan = 'Sistem Informasi, Statistika, Matematika';
                 $loker->link = 'https://www.linkedin.com/jobs/search/?currentJobId=2243927501&pivotType=jymbii';
                 $loker->user_id = $user->id;
-                $loker->deadline = '2020-30-12 00:00:00';
+                $loker->deadline = '2020-12-30 00:00:00';
                 $loker->save();
 
                 $kelas = new KelasAlumni();

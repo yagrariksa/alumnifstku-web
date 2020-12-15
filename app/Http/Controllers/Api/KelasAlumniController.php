@@ -26,10 +26,14 @@ class KelasAlumniController extends Controller
             if ($request->judul) {
                 $kelas->where('judul', 'like', '%'.$request->judul.'%');
             }
+            // filter by kategori
+            if ($request->kategori) {
+                $kelas->where('kategori', $request->kategori);
+            }
             // filter by date
             if ($request->tanggal) {                
                 // must formatted as yyyy-mm-dd
-                $kelas->whereDate('tanggal', 'like', '%'.$request->tanggal.'%');
+                $kelas->whereDate('tanggal', $request->tanggal);
             }
         }
 
