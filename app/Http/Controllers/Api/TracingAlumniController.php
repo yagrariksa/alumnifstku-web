@@ -127,6 +127,10 @@ class TracingAlumniController extends Controller
                 if ($request->jurusan) {
                     $query->where('jurusan', 'like', '%'.$request->jurusan.'%');
                 }
+                // filter by domisili
+                if ($request->domisili) {
+                    $query->where('kota_domisili', 'like', '%'.$request->domisili.'%');
+                }
             });
             
             // filter by company

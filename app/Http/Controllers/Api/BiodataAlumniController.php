@@ -92,6 +92,7 @@ class BiodataAlumniController extends Controller
 
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string',
+            'domisili' => 'required|string',
             'alamat' => 'required|string',
             'umur' => 'required|integer',
             'ttl' => 'required|string',
@@ -123,6 +124,7 @@ class BiodataAlumniController extends Controller
         $biodata = BiodataAlumni::create([
             'alumni_id' => $user->id,
             'nama' => $request->nama,
+            'kota_domisili' => $request->domisili,
             'alamat' => $request->alamat,
             'umur' => $request->umur,
             'ttl' => $request->ttl,
@@ -181,18 +183,19 @@ class BiodataAlumniController extends Controller
 
         $validator = Validator::make($request->all(), [            
             'nama' => 'required|string',
+            'domisili' => 'required|string',
             'alamat' => 'required|string',
             'umur' => 'required|integer',
             'ttl' => 'required|string',
             'jenis_kelamin' => 'required|string',
             'angkatan' => 'required|string',
             'jurusan' => 'required|string',
-            'linkedin' => 'url',
+            'linkedin' => 'string',
             'foto' => 'image|max:2048'
         ]);
 
         if ($validator->fails()) {
-            $msg = $this->validator->errors()->toArray();
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
             return response()->json([
                 'success' => false,
                 'message' => $msg,
@@ -218,6 +221,11 @@ class BiodataAlumniController extends Controller
         if ($request->nama != $biodata->nama) {
             $biodata->update([
                 'nama' => $request->nama
+            ]);
+        }
+        if ($request->domisili != $biodata->domisili) {
+            $biodata->update([
+                'kota_domisili' => $request->domisili
             ]);
         }
         if ($request->alamat != $biodata->alamat) {
