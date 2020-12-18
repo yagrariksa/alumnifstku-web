@@ -21,6 +21,7 @@ class CreateKelasAlumnisTable extends Migration
             $table->dateTime('tanggal');
             $table->string('poster');
             $table->text('deskripsi');
+            $table->string('kategori');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');

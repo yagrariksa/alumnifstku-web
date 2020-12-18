@@ -16,14 +16,25 @@ class LokerController extends Controller
 
         // filter function
         if ($request->filter) {
-            // filter by position
-            $loker->where('jabatan', 'like', '%'.$request->jabatan.'%');
+            if ($request->jabatan) {
+                // filter by position
+                $loker->where('jabatan', 'like', '%'.$request->jabatan.'%');                
+            }
 
-            // filter by company
-            $loker->where('perusahaan', 'like', '%'.$request->perusahaan.'%');
+            if ($request->perusahaan) {
+                // filter by company
+                $loker->where('perusahaan', 'like', '%'.$request->perusahaan.'%');                
+            }
 
-            // filter by cluster
-            $loker->where('cluster', 'like', '%'.$request->cluster.'%');
+            if ($request->cluster) {
+                // filter by cluster
+                $loker->where('cluster', 'like', '%'.$request->cluster.'%');                
+            }
+
+            if ($request->deadline) {
+                // filter by deadline
+                $loker->whereDate('deadline', $request->deadline);                
+            }
         }
 
         // order by

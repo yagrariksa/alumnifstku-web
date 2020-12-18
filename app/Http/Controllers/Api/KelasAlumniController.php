@@ -26,10 +26,14 @@ class KelasAlumniController extends Controller
             if ($request->judul) {
                 $kelas->where('judul', 'like', '%'.$request->judul.'%');
             }
+            // filter by kategori
+            if ($request->kategori) {
+                $kelas->where('kategori', $request->kategori);
+            }
             // filter by date
             if ($request->tanggal) {                
                 // must formatted as yyyy-mm-dd
-                $kelas->whereDate('tanggal', 'like', '%'.$request->tanggal.'%');
+                $kelas->whereDate('tanggal', $request->tanggal);
             }
         }
 
@@ -79,9 +83,10 @@ class KelasAlumniController extends Controller
         ]);
 
         if ($validator->fails()) {
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors(),
+                'message' => $msg,
                 'data' => []
             ], 400);
         }
@@ -279,6 +284,20 @@ class KelasAlumniController extends Controller
     public function updateEmailBooking(Request $request)
     {
         
+    }
+
+    /**
+     * For combine error message generated
+     * from validator->errors()
+     */
+    private function mergeErrorMsg($msg) {
+        $result = [];
+        foreach ($msg as $err) {            
+            foreach ($err as $e) {
+                array_push($result, $e);
+            }
+        }
+        return implode('\n', $result);
     }
 
 }

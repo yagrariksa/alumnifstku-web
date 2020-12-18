@@ -41,6 +41,7 @@ class AdminSeeder extends Seeder
                 $loker->jurusan = 'Sistem Informasi, Statistika, Matematika';
                 $loker->link = 'https://www.linkedin.com/jobs/search/?currentJobId=2243927501&pivotType=jymbii';
                 $loker->user_id = $user->id;
+                $loker->deadline = '2020-12-30 00:00:00';
                 $loker->save();
 
                 $kelas = new KelasAlumni();
@@ -50,6 +51,7 @@ class AdminSeeder extends Seeder
                 $kelas->poster = 'https://media-exp1.licdn.com/dms/image/C5622AQHdt0t80nFI1A/feedshare-shrink_800-alternative/0?e=1607558400&v=beta&t=tzKFuaPLbF0NJHDZE1qBIqxsHk8qldAxjDH3MnOA_iE';
                 $kelas->deskripsi = 'ini deskripsi acara gaes';
                 $kelas->user_id = $user->id;
+                $kelas->kategori = 'Seminar';
                 $kelas->save();
 
                 $speaker = new DataKelasAlumni();

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Alumni;
 use App\BiodataAlumni;
+use App\TracingAlumni;
 use Validator;
 use Storage;
 
@@ -25,6 +26,10 @@ class BiodataAlumniController extends Controller
 
         $validator = Validator::make($request->all(), [
             'nama' => 'required|string',
+            'alamat' => 'required|string',
+            'umur' => 'required|integer',
+            'ttl' => 'required|string',
+            'jenis_kelamin' => 'required|string',
             'angkatan' => 'required|string',
             'jurusan' => 'required|string',
             'linkedin' => 'url',
@@ -32,21 +37,26 @@ class BiodataAlumniController extends Controller
         ]);
 
         if ($validator->fails()) {
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors(),
+                'message' => $msg,
                 'data' => []
             ], 400);
         }        
 
         $url;
         if ($request->hasFile('foto')) {
-            $url = Storage::put($request->foto);            
+            $url = Storage::put('/',$request->foto);            
         }
         
         $biodata = BiodataAlumni::create([
             'alumni_id' => $user->id,
             'nama' => $request->nama,
+            'alamat' => $request->alamat,
+            'umur' => $request->umur,
+            'ttl' => $request->ttl,
+            'jenis_kelamin' => $request->jenis_kelamin,
             'angkatan' => $request->angkatan,
             'jurusan' => $request->jurusan,
             'linkedin' => $request->linkedin,
@@ -54,6 +64,96 @@ class BiodataAlumniController extends Controller
         ]);
 
         if ($biodata) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Biodata anda berhasil ditambahkan.',
+                'data' => $biodata
+            ], 201);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Biodata anda gagal ditambahkan.',
+            'data' => []
+        ], 400);
+    }
+
+    public function createBioAndTracing(Request $request)
+    {
+        $user = auth()->user();
+        
+        if ($user->biodata) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda sudah mengisi biodata',
+                'data' => []
+            ], 400);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'nama' => 'required|string',
+            'domisili' => 'required|string',
+            'alamat' => 'required|string',
+            'umur' => 'required|integer',
+            'ttl' => 'required|string',
+            'jenis_kelamin' => 'required|string',
+            'angkatan' => 'required|string',
+            'jurusan' => 'required|string',
+            'linkedin' => 'string',
+            'foto' => 'image|max:2048',
+            'perusahaan' => 'required|string',
+            'tahun_masuk' => 'required|string',
+            'cluster' => 'required|string',
+            'jabatan' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
+            return response()->json([
+                'success' => false,
+                'message' => $msg,
+                'data' => []
+            ], 400);
+        }        
+
+        $url = null;
+        if ($request->hasFile('foto')) {
+            $url = Storage::put('/',$request->foto);            
+        }
+        
+        $biodata = BiodataAlumni::create([
+            'alumni_id' => $user->id,
+            'nama' => $request->nama,
+            'kota_domisili' => $request->domisili,
+            'alamat' => $request->alamat,
+            'umur' => $request->umur,
+            'ttl' => $request->ttl,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'angkatan' => $request->angkatan,
+            'jurusan' => $request->jurusan,
+            'linkedin' => $request->linkedin,
+            'foto' => $url ? url('/api/pic?pic_url=').$url : null
+        ]);
+
+        if ($biodata) {
+
+            $tracing = TracingAlumni::create([
+                'perusahaan' => $request->perusahaan,
+                'tahun_masuk' => $request->tahun_masuk,
+                'cluster' => $request->cluster,
+                'jabatan' => $request->jabatan,
+                'alumni_id' => $user->id
+            ]);
+
+            if ($tracing) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Biodata dan Pekerjaan anda berhasil ditambahkan.',
+                    'data' => $biodata
+                ]);
+            }
+
+
             return response()->json([
                 'success' => true,
                 'message' => 'Biodata anda berhasil ditambahkan.',
@@ -81,18 +181,24 @@ class BiodataAlumniController extends Controller
             ], 404);
         }
 
-        $validator = Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [            
             'nama' => 'required|string',
+            'domisili' => 'required|string',
+            'alamat' => 'required|string',
+            'umur' => 'required|integer',
+            'ttl' => 'required|string',
+            'jenis_kelamin' => 'required|string',
             'angkatan' => 'required|string',
             'jurusan' => 'required|string',
-            'linkedin' => 'url',
+            'linkedin' => 'string',
             'foto' => 'image|max:2048'
         ]);
 
         if ($validator->fails()) {
+            $msg = $this->mergeErrorMsg($validator->errors()->toArray());
             return response()->json([
                 'success' => false,
-                'message' => $validator->errors(),
+                'message' => $msg,
                 'data' => []
             ], 400);
         }
@@ -100,9 +206,11 @@ class BiodataAlumniController extends Controller
         $url;
         if ($request->hasFile('foto')) {
 
-            /* remove old files first */
-            $filename = explode('=',$biodata->foto)[1];            
-            Storage::delete($filename);
+            if ($biodata->foto != null) {
+                /* remove old files first */
+                $filename = explode('=',$biodata->foto)[1];            
+                Storage::delete($filename);
+            }
             
             $url = Storage::put('/',$request->foto); 
             $biodata->update([
@@ -113,6 +221,31 @@ class BiodataAlumniController extends Controller
         if ($request->nama != $biodata->nama) {
             $biodata->update([
                 'nama' => $request->nama
+            ]);
+        }
+        if ($request->domisili != $biodata->domisili) {
+            $biodata->update([
+                'kota_domisili' => $request->domisili
+            ]);
+        }
+        if ($request->alamat != $biodata->alamat) {
+            $biodata->update([
+                'alamat' => $request->alamat
+            ]);
+        }
+        if ($request->umur != $biodata->umur) {
+            $biodata->update([
+                'umur' => $request->umur
+            ]);
+        }
+        if ($request->ttl != $biodata->ttl) {
+            $biodata->update([
+                'ttl' => $request->ttl
+            ]);
+        }
+        if ($request->jenis_kelamin != $biodata->jenis_kelamin) {
+            $biodata->update([
+                'jenis_kelamin' => $request->jenis_kelamin
             ]);
         }
         if ($request->angkatan != $biodata->angkatan) {
@@ -129,7 +262,7 @@ class BiodataAlumniController extends Controller
             $biodata->update([
                 'linkedin' => $request->linkedin
             ]);
-        }
+        }        
 
         return response()->json([
             'success' => true,
@@ -157,5 +290,19 @@ class BiodataAlumniController extends Controller
             'message' => 'Permintaan anda berhasil.',
             'data' => $biodata
         ], 200);
+    }
+
+    /**
+     * For combine error message generated
+     * from validator->errors()
+     */
+    private function mergeErrorMsg($msg) {
+        $result = [];
+        foreach ($msg as $err) {            
+            foreach ($err as $e) {
+                array_push($result, $e);
+            }
+        }
+        return implode('\n', $result);
     }
 }

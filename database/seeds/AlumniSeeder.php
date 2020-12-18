@@ -23,6 +23,11 @@ class AlumniSeeder extends Seeder
         $data = [
             [
                 'nama' => 'Affandy Fahrizain',
+                'alamat' => 'indonesia',
+                'kota_domisili' => 'Jogja',
+                'umur' => 22,
+                'ttl' => 'Surabaya, 24 Desember 1998',
+                'jenis_kelamin' => 'laki-laki',                
                 'angkatan' => '2016',
                 'jurusan' => 'S1 Sistem Informasi',
                 'linkedin' => 'https://linkedin.com/affandyfahrizain',
@@ -30,6 +35,11 @@ class AlumniSeeder extends Seeder
             ],
             [
                 'nama' => 'Reinaldy Subiakto',
+                'alamat' => 'indonesia',
+                'kota_domisili' => 'Sidoarjo',
+                'umur' => 22,
+                'ttl' => 'Sidoarjo, 22 Maret 1992',
+                'jenis_kelamin' => 'laki-laki',                
                 'angkatan' => '2016',
                 'jurusan' => 'S1 Sistem Informasi',
                 'linkedin' => 'https://www.linkedin.com/in/reinaldy-subiakto/',
@@ -99,11 +109,16 @@ class AlumniSeeder extends Seeder
             $alumni->username = 'alumni'.$i;
             $alumni->password = Hash::make('testing');
             $alumni->token_registration = Str::random(50);
-            $alumni->verified_at = Carbon::now();
+            $alumni->verified_at = Carbon::now();            
             $alumni->save();
     
             $bio = new BiodataAlumni();
             $bio->nama = $data[$i]['nama'];
+            $bio->alamat = $data[$i]['alamat'];
+            $bio->kota_domisili = $data[$i]['kota_domisili'];
+            $bio->umur = $data[$i]['umur'];
+            $bio->ttl = $data[$i]['ttl'];
+            $bio->jenis_kelamin = $data[$i]['jenis_kelamin'];
             $bio->angkatan = $data[$i]['angkatan'];
             $bio->jurusan = $data[$i]['jurusan'];            
             $bio->alumni_id = $alumni->id;

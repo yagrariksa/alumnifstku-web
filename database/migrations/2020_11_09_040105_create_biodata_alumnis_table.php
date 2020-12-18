@@ -17,6 +17,11 @@ class CreateBiodataAlumnisTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('alumni_id')->unsigned();
             $table->string('nama');
+            $table->string('alamat');
+            $table->string('kota_domisili');
+            $table->integer('umur');
+            $table->string('ttl');
+            $table->string('jenis_kelamin');
             $table->integer('angkatan');
             $table->string('jurusan');
             $table->string('linkedin')->nullable();

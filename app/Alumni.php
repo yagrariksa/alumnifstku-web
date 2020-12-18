@@ -19,7 +19,7 @@ class Alumni extends Authenticatable
         'updated_at',
         'verified_at'
     ];
-    protected $hidden = ['password', 'token_registration', 'api_token', 'username', 'verified_at'];    
+    protected $hidden = ['password', 'token_registration', 'api_token', 'verified_at'];    
 
     public function biodata()
     {
