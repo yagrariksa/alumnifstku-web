@@ -62,3 +62,14 @@ Route::prefix('kelas')->middleware('auth')->group(function() {
         Route::get('/', 'KelasController@participant')->name('kelas.participant');
     });
 });
+
+Route::prefix('loker')->middleware('auth')->group(function() {
+    Route::get('/', 'LokerController@index')->name('loker.index');
+    Route::get('/create', 'LokerController@create')->name('loker.create');
+    Route::post('/store', 'LokerController@store')->name('loker.store');
+    Route::get('/edit/{id}', 'LokerController@edit')->name('loker.edit');
+    Route::post('/update/{id}', 'LokerController@update')->name('loker.update');
+    Route::get('/view/{id}', 'LokerController@view')->name('loker.view');
+    Route::get('/destroy/{id}', 'LokerController@destroy')->name('loker.destroy');
+    
+});

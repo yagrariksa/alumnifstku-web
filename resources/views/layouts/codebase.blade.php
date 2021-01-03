@@ -187,10 +187,10 @@
                                 <span class="sidebar-mini-hidden">Info Lowongan Kerja</span>
                             </li>
                             <li>
-                                <a class="nav-item-sidebar" id="loker-create" href="#"><i class="si si-rocket"></i><span class="sidebar-mini-hide">Tambah Lowongan</span></a>
+                                <a class="nav-item-sidebar" id="loker-create" href="/loker/create"><i class="si si-rocket"></i><span class="sidebar-mini-hide">Tambah Lowongan</span></a>
                             </li>
                             <li>
-                                <a class="nav-item-sidebar" id="loker-index" href="#"><i class="si si-briefcase"></i><span class="sidebar-mini-hide">Daftar Lowongan</span></a>
+                                <a class="nav-item-sidebar" id="loker-index" href="/loker"><i class="si si-briefcase"></i><span class="sidebar-mini-hide">Daftar Lowongan</span></a>
                             </li>
                             {{-- <li>
                                 <a class="nav-item-sidebar" id="loker-search" href="#"><i class="si si-magnifier"></i><span class="sidebar-mini-hide">Cari Lowongan</span></a>
@@ -325,9 +325,13 @@
                                 <!-- END Side Overlay -->
 
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="op_auth_signin.html">
-                                    <i class="si si-logout mr-5"></i> Keluar
-                                </a>
+                                <form action="{{route('logout')}}" method="post">
+                                    @csrf
+                                        <a class="dropdown-item" href="#" id="alogout">
+                                            <i class="si si-logout mr-5"></i> Keluar
+                                        </a>
+                                        <button type="submit" id="btnlogout" hidden ></button>
+                                </form>
                             </div>
                         </div>
                         <!-- END User Dropdown -->
@@ -506,6 +510,15 @@
 
         <!-- Page JS Code -->
         <script src="{{asset('assets/js/pages/be_pages_dashboard.min.js')}}"></script>
+
+        <script>
+            const abtn = document.querySelector('#alogout');
+            const btnsubmit = document.querySelector('#btnlogout');
+
+            abtn.addEventListener('click', () => {
+                btnsubmit.click();
+            })
+        </script>
         @yield('script')
     </body>
 </html>
