@@ -187,14 +187,15 @@
                                 <span class="sidebar-mini-hidden">Info Lowongan Kerja</span>
                             </li>
                             <li>
-                                <a class="nav-item-sidebar" id="loker-create" href="/loker/create"><i class="si si-rocket"></i><span class="sidebar-mini-hide">Tambah Lowongan</span></a>
+                                <a class="nav-item-sidebar" id="loker-create" href="{{route('loker.create')}}"><i class="si si-rocket"></i><span class="sidebar-mini-hide">Tambah Lowongan</span></a>
                             </li>
                             <li>
-                                <a class="nav-item-sidebar" id="loker-index" href="/loker"><i class="si si-briefcase"></i><span class="sidebar-mini-hide">Daftar Lowongan</span></a>
+                                <a class="nav-item-sidebar" id="loker-index" href="{{route('loker.index')}}"><i class="si si-briefcase"></i><span class="sidebar-mini-hide">Daftar Lowongan</span></a>
                             </li>
                             {{-- <li>
                                 <a class="nav-item-sidebar" id="loker-search" href="#"><i class="si si-magnifier"></i><span class="sidebar-mini-hide">Cari Lowongan</span></a>
                             </li> --}}
+                            <!-- END Info Loker -->
                             <!-- FST News -->
                             <li class="nav-main-heading">
                                 <span class="sidebar-mini-visible">FN</span>
@@ -207,7 +208,6 @@
                                 <a class="nav-item-sidebar" id="news-index" href="{{route('news.index')}}"><i class="fa fa-newspaper-o"></i><span class="sidebar-mini-hide">Daftar Berita</span></a>
                             </li>
                             <!-- END FST News -->
-                            <!-- END Info Loker -->
                             <!-- Sharing Memory -->
                             {{-- <li class="nav-main-heading">
                                 <span class="sidebar-mini-visible">SM</span>
@@ -272,7 +272,7 @@
                                     <div class="col-2 mb-5">
                                         <a class="text-default" data-toggle="theme" data-theme="default" href="javascript:void(0)">
                                             <i class="fa fa-2x fa-circle"></i>
-                                        </a>
+                                        </a>uery((function(){t.init()}))}});
                                     </div>
                                     <div class="col-2 mb-5">
                                         <a class="text-elegance" data-toggle="theme" data-theme="{{asset('assets/css/themes/elegance.min.css')}}" href="javascript:void(0)">

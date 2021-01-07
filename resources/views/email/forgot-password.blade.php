@@ -7,6 +7,10 @@
     <title>Reset Password</title>
 </head>
 <body>
-    <p>Silakan klik link berikut <a href="{{route('alumni.forgot', $data->token_registration)}}">{{route('alumni.forgot', $data->token_registration)}}</a>.</p>
+    <p>Silakan klik link berikut
+        <a href="{{route('alumni.forgot', $data->token_registration)}}">
+            {{route('alumni.forgot', $data->token_registration)}}
+        </a>.
+    </p>
 </body>
 </html>

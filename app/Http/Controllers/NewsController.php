@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Validator;
 use App\FstNews;
+use App\Mail\NotifNewsMail;
 use Auth;
+use Illuminate\Support\Facades\Mail;
 
 class NewsController extends Controller
 {
@@ -111,5 +113,15 @@ class NewsController extends Controller
         
         flash('success')->success();
         return redirect()->route('news.index');
+    }
+
+    public function email(){
+        Mail::to("luckyrama0@gmail.com")->send(new NotifNewsMail());
+        if (count(Mail::failures()) > 0) {
+            echo("gagal");
+        }else{
+            echo("berhasil");
+        }
+
     }
 }

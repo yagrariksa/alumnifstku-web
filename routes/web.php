@@ -47,6 +47,7 @@ Route::prefix('news')->middleware('auth')->group(function() {
     Route::post('/update/{id}', 'NewsController@update')->name('news.update');
     Route::get('/view/{id}', 'NewsController@view')->name('news.view');
     Route::get('/destroy/{id}', 'NewsController@destroy')->name('news.destroy');
+    Route::get('/email', 'NewsController@email');
 });
 
 Route::prefix('kelas')->middleware('auth')->group(function() {
