@@ -25,7 +25,7 @@
                         </a>
                     </div> --}}
                     <h3 class="h4 font-w700 text-uppercase mb-5">{{$n->jabatan}}</h3>
-                    <p class="font-w500 mb-5">{{$n->perusahaan}}</p>                    
+                    <p class="font-w500 mb-5">Perusahaan : {{$n->perusahaan}}<br>Cluster : {{$n->cluster}}<br>Jurusan : {{$n->jurusan}}<br>Deadline : {{$n->deadline}}</p>                    
                     <div class="text-muted mb-10">
                         <span class="mr-15">
                             <i class="fa fa-fw fa-calendar mr-5"></i>{{Carbon\Carbon::parse($n->created_at)->diffForHumans()}}
@@ -61,6 +61,6 @@
     <script src="{{asset('assets/js/pages/be_tables_datatables.min.js')}}"></script>
     <script>
         $('.nav-item-sidebar').removeClass('active')
-        $('#news-index').addClass("active")
+        $('#loker-index').addClass("active")
     </script>
 @endsection

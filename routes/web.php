@@ -10,6 +10,8 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+
 Auth::routes();
 Route::get('/home',function() {
     return redirect()->route('dashboard.index');
@@ -47,7 +49,6 @@ Route::prefix('news')->middleware('auth')->group(function() {
     Route::post('/update/{id}', 'NewsController@update')->name('news.update');
     Route::get('/view/{id}', 'NewsController@view')->name('news.view');
     Route::get('/destroy/{id}', 'NewsController@destroy')->name('news.destroy');
-    Route::get('/email', 'NewsController@email');
 });
 
 Route::prefix('kelas')->middleware('auth')->group(function() {
@@ -72,5 +73,4 @@ Route::prefix('loker')->middleware('auth')->group(function() {
     Route::post('/update/{id}', 'LokerController@update')->name('loker.update');
     Route::get('/view/{id}', 'LokerController@view')->name('loker.view');
     Route::get('/destroy/{id}', 'LokerController@destroy')->name('loker.destroy');
-    
 });

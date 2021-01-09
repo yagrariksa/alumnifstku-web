@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class NotifNewsMail extends Mailable
+class LokerMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -16,8 +16,9 @@ class NotifNewsMail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
+        $this->data = $data;
     }
 
     /**
@@ -27,6 +28,8 @@ class NotifNewsMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('email.notifnews');
+        return $this->markdown('email.loker')->with([
+            'data' => $this->data,
+        ]);
     }
 }

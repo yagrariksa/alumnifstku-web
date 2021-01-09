@@ -2,44 +2,80 @@
 
 namespace App\Http\Controllers;
 
+use App\Alumni;
+use App\BiodataAlumni;
 use App\Loker;
+use App\Mail\LokerMail;
 use Illuminate\Http\Request;
 use Validator;
 use Auth;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
+use DateTime;
+use Illuminate\Support\Facades\Mail;
 
 class LokerController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $loker = Loker::paginate(10);
 
+        foreach($loker as $l) {
+            $l->deadline = new DateTime($l->deadline);
+              
+            $l->deadline = $l->deadline->format('d-M-Y');
+        }
+
         return view('loker.index')->with([
-            'loker'=> $loker
+            'loker' => $loker
         ]);
     }
 
-    public function create(){
+    public function create()
+    {
         return view('loker.create');
-
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'jabatan'    => 'required|string', 
-            'perusahaan' => 'required|string', 
-            'deskripsi'  => 'required|string', 
-            'poster'     => 'string', 
-            'link'       => 'string', 
-            'cluster'    => 'required|string', 
-            'jurusan'    => 'required|string', 
+            'jabatan'    => 'required|string',
+            'perusahaan' => 'required|string',
+            'deskripsi'  => 'required|string',
+            'poster'     => 'string',
+            'link'       => 'string',
+            'cluster'    => 'required|string',
             'deadline'   => 'required|string',
         ]);
 
         if ($validator->fails()) {
-            dd($validator);
             flash('error')->error();
             return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $jurusan = "";
+
+        if ($request['sistem_informasi']) {
+            $jurusan .= "Sistem Informasi,";
+        }
+        if ($request['teknik_biomedis']) {
+            $jurusan .= 'Teknik Biomedis,';
+        }
+        if ($request['teknik_lingkungan']) {
+            $jurusan .= 'Teknik Lingkungan,';
+        }
+        if ($request['matematika']) {
+            $jurusan .= 'Matematika,';
+        }
+        if ($request['fisika']) {
+            $jurusan .= 'Fisika,';
+        }
+        if ($request['kimia']) {
+            $jurusan .= 'Kimia,';
+        }
+        if ($request['biologi']) {
+            $jurusan .= 'Biologi,';
+        }
+        if ($request['statistika']) {
+            $jurusan .= 'Statistika,';
         }
 
         $loker = Loker::create([
@@ -50,19 +86,42 @@ class LokerController extends Controller
             'poster'     => $request->poster,
             'link'       => $request->link,
             'cluster'    => $request->cluster,
-            'jurusan'    => $request->jurusan,
+            'jurusan'    => $jurusan,
             'deadline'   => (string)$request->deadline,
         ]);
+        
+        $this->sendemail($jurusan,$loker);
+
         flash('success')->success();
         return redirect()->route('loker.index');
-
     }
 
-    public function view($id){
+    public function sendemail($listjurusan, $data)
+    {
+        $jurusan = explode(",",$listjurusan);
+        foreach($jurusan as $j)
+        {
+            // cari alumni dengan jurusan tersebut
+            $bio_al = BiodataAlumni::where('jurusan',$j)->get();
+            foreach($bio_al as $a)
+            {
+                // $alumni = Alumni::where('',$a->alumni_id)->first();
+                $alumni = $a->alumni;
+                // dapatkan emailnya
+                $email = $alumni->email;
+    
+                // masukin data ke Email
+                Mail::to($email)->send(new LokerMail($data));
+            }
+        }
+    }
+
+    public function view($id)
+    {
 
         $loker = Loker::find($id);
 
-        if(!$loker){
+        if (!$loker) {
             flash('ID Loker tidak ditemukan!')->error();
             return redirect()->back();
         }
@@ -70,39 +129,68 @@ class LokerController extends Controller
         return view('loker.view')->with([
             'loker' => $loker
         ]);
-
     }
 
     public function edit($id)
     {
         $loker = Loker::find($id);
 
-        if(!$loker){
+        if (!$loker) {
             flash('ID Loker tidak ditemukan!')->error();
             return redirect()->back();
         }
 
+        $jurusan = explode(",",$loker['jurusan']);
+        
+
         return view('loker.edit')->with([
-            'loker' => $loker
+            'loker' => $loker,
+            'jurusan' => $jurusan,
         ]);
     }
 
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'jabatan'    => 'required|string', 
-            'perusahaan' => 'required|string', 
-            'deskripsi'  => 'required|string', 
-            'poster'     => 'required|string', 
-            'link'       => 'required|string', 
-            'cluster'    => 'required|string', 
-            'jurusan'    => 'required|string', 
+            'jabatan'    => 'required|string',
+            'perusahaan' => 'required|string',
+            'deskripsi'  => 'required|string',
+            'poster'     => 'required|string',
+            'link'       => 'required|string',
+            'cluster'    => 'required|string',
             'deadline'   => 'required|string',
         ]);
 
         if ($validator->fails()) {
             flash('error')->error();
             return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        $jurusan = "";
+
+        if ($request['sistem_informasi']) {
+            $jurusan .= "Sistem Informasi,";
+        }
+        if ($request['teknik_biomedis']) {
+            $jurusan .= 'Teknik Biomedis,';
+        }
+        if ($request['teknik_lingkungan']) {
+            $jurusan .= 'Teknik Lingkungan,';
+        }
+        if ($request['matematika']) {
+            $jurusan .= 'Matematika,';
+        }
+        if ($request['fisika']) {
+            $jurusan .= 'Fisika,';
+        }
+        if ($request['kimia']) {
+            $jurusan .= 'Kimia,';
+        }
+        if ($request['biologi']) {
+            $jurusan .= 'Biologi,';
+        }
+        if ($request['statistika']) {
+            $jurusan .= 'Statistika,';
         }
 
         $loker = Loker::find($id);
@@ -147,9 +235,9 @@ class LokerController extends Controller
             ]);
         }
 
-        if ($request->jurusan != $loker->jurusan) {
+        if ($jurusan != $loker->jurusan) {
             $loker->update([
-                'jurusan' => $request->jurusan
+                'jurusan' => $jurusan
             ]);
         }
 
@@ -158,6 +246,8 @@ class LokerController extends Controller
                 'deadline' => $request->deadline
             ]);
         }
+
+        $this->sendemail($jurusan,$loker);
 
         flash('Success')->success();
         return redirect()->route('loker.index');
