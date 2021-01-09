@@ -5,9 +5,13 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Alumni;
+use App\BiodataAlumni;
 use App\SharingAlumni;
 use App\KomentarSharingAlumni;
+use App\Mail\SharingNotif;
+use App\NotifAlumni;
 use App\PostLike;
+use Illuminate\Support\Facades\Mail;
 use Storage;
 use Validator;
 use Intervention\Image\Facades\Image as Image;
@@ -199,6 +203,25 @@ class SharingMemoryController extends Controller
             'alumni_id' => auth()->user()->id
         ]);
 
+        // dapetin si pemilik postingan
+        $sharing = SharingAlumni::where('id', $id);
+        $penyuka = auth()->user()->biodata;
+        $alumni = $sharing->alumni;
+        $email = $alumni->email;
+
+        // bikin trigger kirim email
+        Mail::to($email)->send(new SharingNotif($sharing->foto, 'menyukai', $penyuka->nama));
+
+        // bikin record data notif
+        $notif = NotifAlumni::create(
+            [
+                'text' => $penyuka->nama . " menyukai postingan anda", 
+                'is_read' => false, 
+                'alumni_id' => auth()->user()->id, 
+            ]
+        );
+
+
         return response()->json([
             'success' => true,
             'message' => 'Permintaan anda berhasil.',
@@ -249,6 +272,12 @@ class SharingMemoryController extends Controller
         ], 200);
     }
 
+    /**
+     * 
+     * method untuk menampilkan
+     * list komentar pada suatu
+     * post
+     */
     public function comments($id)
     {
         $post = SharingAlumni::with(['comment' => function($query) {
@@ -262,6 +291,8 @@ class SharingMemoryController extends Controller
                 'data' => []
             ], 404);
         }        
+        
+        
 
         return response()->json([
             'success' => true,
@@ -295,6 +326,24 @@ class SharingMemoryController extends Controller
                 'data' => []
             ], 400);
         }
+
+        // dapetin si pemilik postingan
+        $sharing = SharingAlumni::where('id', $id);
+        $penyuka = auth()->user()->biodata;
+        $alumni = $sharing->alumni;
+        $email = $alumni->email;
+
+        // bikin trigger kirim email
+        Mail::to($email)->send(new SharingNotif($sharing->foto, 'mengomentari', $penyuka->nama));
+
+        // bikin record data notif
+        $notif = NotifAlumni::create(
+            [
+                'text' => $penyuka->nama . " mengomentari postingan anda", 
+                'is_read' => false, 
+                'alumni_id' => auth()->user()->id, 
+            ]
+        );
 
         $comment = KomentarSharingAlumni::create([
             'alumni_id' => auth()->user()->id,
