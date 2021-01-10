@@ -220,10 +220,10 @@
                                 <span class="sidebar-mini-hidden">Kelas Alumni</span>
                             </li>
                             <li>
-                                <a class="nav-item-sidebar" id="kelas-create" href="#"><i class="si si-book-open"></i><span class="sidebar-mini-hide">Tambah Kelas Alumni</span></a>
+                                <a class="nav-item-sidebar" id="kelas-create" href="{{route('kelas.create')}}"><i class="si si-book-open"></i><span class="sidebar-mini-hide">Tambah Kelas Alumni</span></a>
                             </li>
                             <li>
-                                <a class="nav-item-sidebar" id="kelas-index" href="#"><i class="si si-calendar"></i><span class="sidebar-mini-hide">Daftar Kelas Alumni</span></a>
+                                <a class="nav-item-sidebar" id="kelas-index" href="{{route('kelas.index')}}"><i class="si si-calendar"></i><span class="sidebar-mini-hide">Daftar Kelas Alumni</span></a>
                             </li>
                             {{-- <li>
                                 <a class="nav-item-sidebar" id="kelas-search" href="#"><i class="si si-magnifier"></i><span class="sidebar-mini-hide">Cari Kelas Alumni</span></a>

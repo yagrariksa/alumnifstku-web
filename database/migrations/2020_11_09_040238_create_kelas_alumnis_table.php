@@ -19,7 +19,7 @@ class CreateKelasAlumnisTable extends Migration
             $table->string('judul');
             $table->integer('kuota');
             $table->dateTime('tanggal');
-            $table->string('poster');
+            $table->string('poster')->nullable();
             $table->text('deskripsi');
             $table->string('kategori');
             $table->timestamps();
