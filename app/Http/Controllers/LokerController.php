@@ -40,8 +40,8 @@ class LokerController extends Controller
             'jabatan'    => 'required|string',
             'perusahaan' => 'required|string',
             'deskripsi'  => 'required|string',
-            'poster'     => 'string',
-            'link'       => 'string',
+            'poster'     => '',
+            'link'       => '',
             'cluster'    => 'required|string',
             'deadline'   => 'required|string',
         ]);
@@ -87,7 +87,7 @@ class LokerController extends Controller
             'link'       => $request->link,
             'cluster'    => $request->cluster,
             'jurusan'    => $jurusan,
-            'deadline'   => (string)$request->deadline,
+            'deadline'   => (string)$request->deadline . " 00:00:00",
         ]);
         
         $this->sendemail($jurusan,$loker);
@@ -111,7 +111,7 @@ class LokerController extends Controller
                 $email = $alumni->email;
     
                 // masukin data ke Email
-                Mail::to($email)->send(new LokerMail($data));
+                // Mail::to($email)->send(new LokerMail($data));
             }
         }
     }
@@ -141,6 +141,8 @@ class LokerController extends Controller
         }
 
         $jurusan = explode(",",$loker['jurusan']);
+        $tanggal = explode(" ",$loker['deadline']);
+        $loker->deadline = $tanggal[0];
         
 
         return view('loker.edit')->with([
@@ -155,8 +157,8 @@ class LokerController extends Controller
             'jabatan'    => 'required|string',
             'perusahaan' => 'required|string',
             'deskripsi'  => 'required|string',
-            'poster'     => 'required|string',
-            'link'       => 'required|string',
+            'poster'     => '',
+            'link'       => '',
             'cluster'    => 'required|string',
             'deadline'   => 'required|string',
         ]);
@@ -243,7 +245,7 @@ class LokerController extends Controller
 
         if ($request->deadline != $loker->deadline) {
             $loker->update([
-                'deadline' => $request->deadline
+                'deadline' => $request->deadline . " 00:00:00"
             ]);
         }
 

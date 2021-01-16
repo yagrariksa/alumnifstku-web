@@ -217,7 +217,7 @@ class SharingMemoryController extends Controller
             [
                 'text' => $penyuka->nama . " menyukai postingan anda", 
                 'is_read' => false, 
-                'alumni_id' => auth()->user()->id, 
+                'alumni_id' => $alumni->id, 
             ]
         );
 
@@ -409,7 +409,8 @@ class SharingMemoryController extends Controller
      * For combine error message generated
      * from validator->errors()
      */
-    private function mergeErrorMsg($msg) {
+    private function mergeErrorMsg($msg)
+    {
         $result = [];
         foreach ($msg as $err) {            
             foreach ($err as $e) {
@@ -417,5 +418,19 @@ class SharingMemoryController extends Controller
             }
         }
         return implode('\n', $result);
+    }
+
+    public function notif()
+    {
+        $notif = NotifAlumni::where('alumni_id', auth()->user()->id)
+                            ->with('alumni')
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+                            
+        return response()->json([
+            'success' => true,
+            'message' => 'Permintaan anda berhasil.',
+            'data' => $notif
+        ], 200);                        
     }
 }

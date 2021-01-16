@@ -68,6 +68,7 @@ Route::namespace('Api')->group(function() {
     Route::prefix('sharing')->middleware('auth:api')->group(function() {
         Route::get('/', 'SharingMemoryController@timeline')->name('timeline');
         Route::get('/my', 'SharingMemoryController@myPost')->name('my');
+        Route::get('/notif','SharingMemoryController@notif')->name('notif');
         Route::get('/{id}', 'SharingMemoryController@detail')->name('detail');
         Route::post('/{id}/like', 'SharingMemoryController@like')->name('like');
         Route::post('/{id}/unlike', 'SharingMemoryController@unlike')->name('unlike');
@@ -79,6 +80,7 @@ Route::namespace('Api')->group(function() {
         Route::post('/', 'SharingMemoryController@postMemory')->name('post');
         Route::post('/{id}/update', 'SharingMemoryController@updateMemory')->name('update');
         Route::post('/{id}/remove', 'SharingMemoryController@removeMemory')->name('remove');
+        
     });
 
     Route::get('/pic', 'PictureController@show')->name('show');
