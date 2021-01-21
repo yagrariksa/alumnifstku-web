@@ -16,12 +16,15 @@ class CreateNotifAlumnisTable extends Migration
         Schema::create('notif_alumnis', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->bigInteger('alumni_id')->unsigned();
+            $table->bigInteger('sharing_id')->unsigned();
             $table->string('text');
             $table->boolean('is_read');   
             $table->datetime('readed_at');
             $table->timestamps();
 
             $table->foreign('alumni_id')->references('id')->on('alumnis')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('sharing_id')->references('id')->on('sharing_alumnis')->onDelete('cascade')->onUpdate('cascade');
+
         });
     }
 

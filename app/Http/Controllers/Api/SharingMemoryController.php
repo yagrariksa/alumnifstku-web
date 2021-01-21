@@ -218,6 +218,7 @@ class SharingMemoryController extends Controller
                 'text' => $penyuka->nama . " menyukai postingan anda", 
                 'is_read' => false, 
                 'alumni_id' => $alumni->id, 
+                'sharing_id' => $sharing->id,
             ]
         );
 
@@ -342,6 +343,7 @@ class SharingMemoryController extends Controller
                 'text' => $penyuka->nama . " mengomentari postingan anda", 
                 'is_read' => false, 
                 'alumni_id' => auth()->user()->id, 
+                'sharing_id' => $sharing->id,
             ]
         );
 
@@ -423,9 +425,19 @@ class SharingMemoryController extends Controller
     public function notif()
     {
         $notif = NotifAlumni::where('alumni_id', auth()->user()->id)
-                            ->with('alumni')
+                            ->with('alumni', 'post')
                             ->orderBy('created_at', 'desc')
                             ->get();
+
+        $hey = NotifAlumni::where('alumni_id', auth()->user()->id)
+                        ->where('is_read', false)
+                        ->get();
+
+        foreach($hey as $h)
+        {
+            $h->is_read = true;
+            $h->save();
+        }
                             
         return response()->json([
             'success' => true,

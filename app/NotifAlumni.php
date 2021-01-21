@@ -11,11 +11,17 @@ class NotifAlumni extends Model
         'is_read', 
         'readed_at', 
         'alumni_id', 
+        'sharing_id',
         'created_at', 
         'updated_at'];
 
     public function alumni()
     {
         return $this->belongsTo('App\Alumni', 'alumni_id', 'id');
+    }
+
+    public function post()
+    {
+        return $this->belongsTo('App\SharingAlumni','sharing_id','id');
     }
 }
