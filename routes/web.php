@@ -11,7 +11,6 @@
 |
 */
 
-
 Auth::routes();
 Route::get('/home',function() {
     return redirect()->route('dashboard.index');
@@ -59,10 +58,15 @@ Route::prefix('kelas')->middleware('auth')->group(function() {
     Route::post('/update/{id}', 'KelasController@update')->name('kelas.update');
     Route::get('/view/{id}', 'KelasController@view')->name('kelas.view');
     Route::get('/destroy/{id}', 'KelasController@destroy')->name('kelas.destroy');
+
+    Route::get('/pembicara/{id}','KelasController@pembicara')->name('kelas.pembicara.index');
+    Route::post('/pembicara/{id}/store','KelasController@pembicarastrore')->name('kelas.pembicara.store');
+    Route::get('/pembicara/{id}/destroy/{pembicara}','KelasController@pembicaradestroy')->name('kelas.pembicara.destroy');
     
     Route::prefix('peserta')->group(function() {
         Route::get('/', 'KelasController@participant')->name('kelas.participant');
     });
+
 });
 
 Route::prefix('loker')->middleware('auth')->group(function() {

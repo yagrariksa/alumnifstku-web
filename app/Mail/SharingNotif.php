@@ -33,7 +33,7 @@ class SharingNotif extends Mailable
         return $this->markdown('email.sharing-notif')
                     ->with([
                         'foto' => $this->foto,
-                        'tindakan' => $this->str,
+                        'tindakan' => $this->tindakan,
                         'subjek' => $this->subjek,
                     ]);
     }

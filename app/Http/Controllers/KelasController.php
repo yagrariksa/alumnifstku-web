@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Alumni;
+use App\DataKelasAlumni;
 use App\KelasAlumni;
 use DateTime;
 use Illuminate\Support\Facades\Auth;
@@ -140,5 +141,52 @@ class KelasController extends Controller
 
         flash('success')->success();
         return redirect()->route('kelas.index');
+    }
+
+    public function pembicara($id)
+    {
+        $kelas = KelasAlumni::with('uploader')->find($id);
+        $explode = explode(" ", $kelas->tanggal);
+        $kelas->tanggal = new DateTime($explode[0]);
+          
+        $kelas->tanggal = $kelas->tanggal->format('d-M-Y') . " " . $explode[1];
+        
+        $pembicara = DataKelasAlumni::where('kelas_alumni_id',$id)->get();
+        
+        return view('kelas.pembicara.index', [
+            'kelas'     => $kelas,
+            'pembicara' => $pembicara,
+        ]);
+    }
+
+    public function pembicarastrore($id, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama'    => 'required|string',
+            'foto' => '',
+            'tentang'  => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            flash('error')->error();
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        DataKelasAlumni::create([
+            'pembicara' => $request->nama,
+            'foto'      => $request->foto,
+            'tentang'   => $request->tentang,
+            'kelas_alumni_id' => $id,
+        ]);
+
+        flash('success')->success();
+        return redirect()->route('kelas.pembicara.index',$id);
+    }
+
+    public function pembicaradestroy($id, $pembicara)
+    {
+        $pembicara = DataKelasAlumni::find($pembicara)->delete();
+        flash('success')->success();
+        return redirect()->route('kelas.pembicara.index',$id);
     }
 }

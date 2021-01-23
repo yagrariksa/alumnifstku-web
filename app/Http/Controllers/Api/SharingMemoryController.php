@@ -204,13 +204,13 @@ class SharingMemoryController extends Controller
         ]);
 
         // dapetin si pemilik postingan
-        $sharing = SharingAlumni::where('id', $id);
+        $sharing = SharingAlumni::find('id');
         $penyuka = auth()->user()->biodata;
         $alumni = $sharing->alumni;
         $email = $alumni->email;
 
         // bikin trigger kirim email
-        Mail::to($email)->send(new SharingNotif($sharing->foto, 'menyukai', $penyuka->nama));
+        // Mail::to($email)->send(new SharingNotif($sharing->foto, 'menyukai', $penyuka->nama));
 
         // bikin record data notif
         $notif = NotifAlumni::create(
@@ -329,13 +329,13 @@ class SharingMemoryController extends Controller
         }
 
         // dapetin si pemilik postingan
-        $sharing = SharingAlumni::where('id', $id);
+        $sharing = SharingAlumni::find($id);
         $penyuka = auth()->user()->biodata;
         $alumni = $sharing->alumni;
         $email = $alumni->email;
 
         // bikin trigger kirim email
-        Mail::to($email)->send(new SharingNotif($sharing->foto, 'mengomentari', $penyuka->nama));
+        // Mail::to($email)->send(new SharingNotif($sharing->foto, 'mengomentari', $penyuka->nama));
 
         // bikin record data notif
         $notif = NotifAlumni::create(

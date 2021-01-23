@@ -25,7 +25,7 @@
                         </a>
                     </div> --}}
                     <h3 class="h4 font-w700 text-uppercase mb-5">{{$n->judul}}</h3>
-                    <p class="font-w500 mb-5">Kuota : {{$n->kuota}}<br>Kategori : {{$n->kategori}}<br>Tanggal : {{$n->tanggal}}</p>                    
+                    <p class="font-w500 mb-5">Kuota : {{$n->kuota}}<br>Kategori : {{$n->kategori}}<br>Tanggal : {{$n->tanggal}} <br> <a href="{{route('kelas.pembicara.index',$n->id)}}">Lihat Pembicara</a> </p>                    
                     <div class="text-muted mb-10">
                         <span class="mr-15">
                             <i class="fa fa-fw fa-calendar mr-5"></i>{{Carbon\Carbon::parse($n->created_at)->diffForHumans()}}
