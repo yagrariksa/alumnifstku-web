@@ -45,6 +45,14 @@ class KelasAlumniController extends Controller
 
         $kelas = $kelas->orderBy('tanggal', $order)->get();
 
+        if (sizeof($kelas) < 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Tidak Ditemukan!',
+                'data' => []
+            ], 404);
+        }
+        
         return response()->json([
             'success' => true,
             'message' => 'Permintaan berhasil.',

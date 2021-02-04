@@ -1,0 +1,4 @@
+[04-Feb-2021 07:16:41 UTC] PHP Fatal error:  Uncaught Error: Class 'Route' not found in /home/alumnifst/public_html/webapp/laravel/routes/api.php:16
+Stack trace:
+#0 {main}
+  thrown in /home/alumnifst/public_html/webapp/laravel/routes/api.php on line 16

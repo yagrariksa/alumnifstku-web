@@ -149,6 +149,14 @@ class TracingAlumniController extends Controller
         
         $alumni = $alumni->orderBy('created_at', 'desc')->get();        
 
+        if (sizeof($alumni) < 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Tidak Ditemukan!',
+                'data' => []
+            ], 404);
+        }
+        
         return response()->json([
             'success' => true,
             'message' => 'Permintaan berhasil.',

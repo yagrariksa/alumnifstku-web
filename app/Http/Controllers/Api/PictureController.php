@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Storage;
+use Response;
 use Intervention\Image\Facades\Image as Image;
 
 class PictureController extends Controller

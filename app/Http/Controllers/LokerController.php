@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Validator;
 use Auth;
 use DateTime;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
 
 class LokerController extends Controller
@@ -95,6 +96,16 @@ class LokerController extends Controller
         flash('success')->success();
         return redirect()->route('loker.index');
     }
+    
+    public function testemail()
+    {
+        Artisan::call('config:clear');
+        Artisan::call('config:cache');
+        Artisan::call('cache:clear');
+        // $loker = Loker::first();
+        // $this->sendemail('Sistem Informasi',$loker);
+        echo "SUCCESS";
+    }
 
     public function sendemail($listjurusan, $data)
     {
@@ -111,7 +122,7 @@ class LokerController extends Controller
                 $email = $alumni->email;
     
                 // masukin data ke Email
-                // Mail::to($email)->send(new LokerMail($data));
+                Mail::to($email)->send(new LokerMail($data));
             }
         }
     }
