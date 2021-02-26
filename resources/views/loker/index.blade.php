@@ -28,10 +28,10 @@
                     <p class="font-w500 mb-5">Perusahaan : {{$n->perusahaan}}<br>Cluster : {{$n->cluster}}<br>Jurusan : {{$n->jurusan}}<br>Deadline : {{$n->deadline}}</p>                    
                     <div class="text-muted mb-10">
                         <span class="mr-15">
-                            <i class="fa fa-fw fa-calendar mr-5"></i>{{Carbon\Carbon::parse($n->created_at)->diffForHumans()}}
+                            <i class="fa fa-fw fa-calendar mr-5"></i>{{Carbon\Carbon::parse($n->updated_at)->diffForHumans()}}
                         </span>
                         <a class="text-muted mr-15" href="javascript:void(0)">
-                            <i class="fa fa-fw fa-user mr-5"></i>{{Auth::user()->name}}
+                            <i class="fa fa-fw fa-user mr-5"></i>{{$n->uploader->name}}
                         </a>                        
                         <a class="link-effect text-muted mr-10 mb-5 d-inline-block" href="{{route('loker.edit', $n->id)}}">
                             <i class="fa fa-pencil mr-5"></i> Edit Lowongan      

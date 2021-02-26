@@ -17,7 +17,7 @@ class LokerController extends Controller
 {
     public function index()
     {
-        $loker = Loker::paginate(10);
+        $loker = Loker::with('uploader')->orderBy('updated_at','DESC')->paginate(10);
 
         foreach($loker as $l) {
             $l->deadline = new DateTime($l->deadline);

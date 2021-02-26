@@ -34,6 +34,9 @@ Route::prefix('dashboard')->middleware('auth')->group(function() {
     Route::get('/', 'HomeController@index')->name('dashboard.index');
 });
 
+Route::prefix('my')->middleware('auth')->group(function(){
+});
+
 Route::prefix('alumni')->middleware('auth')->group(function() {
     Route::get('/', 'AlumniController@index')->name('alumni.index');
     Route::get('/create', 'AlumniController@create')->name('alumni.create');
