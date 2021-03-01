@@ -12,9 +12,11 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
-        $this->call([
-            AdminSeeder::class,
-            AlumniSeeder::class
-        ]);
+        // $this->call([
+        //     AdminSeeder::class,
+        //     AlumniSeeder::class
+        // ]);
+
+        factory(App\User::class, 50)->create();
     }
 }

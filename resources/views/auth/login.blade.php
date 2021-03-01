@@ -148,12 +148,12 @@
                                             <i class="si si-login mr-10"></i> Sign In
                                         </button>
                                         <div class="mt-30">
-                                            <div class="mb-20">
+                                            {{-- <div class="mb-20">
                                                 <h6 class="h6 font-w400 text-muted mb-0">Belum punya akun?</h6>
                                             </div>
                                             <a class="link-effect text-muted mr-10 mb-5 d-inline-block" href="{{route('register')}}">
                                                 <i class="fa fa-plus mr-5"></i> Daftar Sekarang
-                                            </a>
+                                            </a> --}}
                                             <a class="link-effect text-muted mr-10 mb-5 d-inline-block" href="{{route('password.request')}}">
                                                 <i class="fa fa-warning mr-5"></i> Lupa Password
                                             </a>

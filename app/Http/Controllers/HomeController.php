@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Alumni;
+use App\FstNews;
+use App\KelasAlumni;
+use App\Loker;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +27,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard.home');
+        $a = Alumni::count();
+        $l = Loker::count();
+        $b = FstNews::count();
+        $k = KelasAlumni::count();
+        return view('dashboard.home',[
+            'a' => $a,
+            'l' => $l,
+            'b' => $b,
+            'k' => $k,
+        ]);
     }
 }

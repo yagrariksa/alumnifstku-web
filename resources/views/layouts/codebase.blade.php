@@ -145,12 +145,12 @@
 
                         <!-- Visible only in normal mode -->
                         <div class="sidebar-mini-hidden-b text-center">
-                            <a class="img-link" href="be_pages_generic_profile.html">
+                            <a class="img-link" href="{{route('my.index')}}">
                                 <img class="img-avatar" src="{{asset('assets/media/avatars/avatar15.jpg')}}" alt="">
                             </a>
                             <ul class="list-inline mt-10">
                                 <li class="list-inline-item">
-                                    <a class="link-effect text-dual-primary-dark font-size-sm font-w600 text-uppercase" href="be_pages_generic_profile.html">{{Auth::user()->name}}</a>
+                                    <a class="link-effect text-dual-primary-dark font-size-sm font-w600 text-uppercase" href="{{route('my.index')}}">{{Auth::user()->name}}</a>
                                 </li>
                             </ul>                            
                         </div>
@@ -235,7 +235,7 @@
                                 <span class="sidebar-mini-hidden">Akun</span>
                             </li>
                             <li>
-                                <a class="nav-item-sidebar" id="account-changepwd" href="#"><i class="si si-key"></i><span class="sidebar-mini-hide">Ubah Password</span></a>
+                                <a class="nav-item-sidebar" id="account-changepwd" href="{{route('my.edit')}}"><i class="si si-key"></i><span class="sidebar-mini-hide">Ubah Password</span></a>
                             </li>
                             <!-- END Akun -->
                         </ul>
@@ -317,13 +317,27 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-right min-width-200" aria-labelledby="page-header-user-dropdown">                                
 
+                                
                                 <!-- Toggle Side Overlay -->
                                 <!-- Layout API, functionality initialized in Template._uiApiLayout() -->
-                                <a class="dropdown-item" href="javascript:void(0)" data-toggle="layout" data-action="side_overlay_toggle">
-                                    <i class="si si-key mr-5"></i> Ubah Password
+                                <a class="dropdown-item" href="{{route('my.edit')}}" data-toggle="layout" data-action="side_overlay_toggle">
+                                    <i class="si si-pencil mr-5"></i> Ubah Profile
                                 </a>
                                 <!-- END Side Overlay -->
-
+                                @if (Auth::user()->role == 1)
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">
+                                    <i class="si si-user-follow mr-5"></i> Tambah Admin
+                                </a>
+                                
+                                <a class="dropdown-item" href="{{route('my.admin')}}">
+                                    <i class="si si-earphones-alt mr-5"></i> List Admin
+                                </a>
+                                
+                                {{-- <a class="dropdown-item" href="{{route('my.log')}}">
+                                    <i class="si si-graph mr-5"></i> Log Admin
+                                </a> --}}
+                                @endif
                                 <div class="dropdown-divider"></div>
                                 <form action="{{route('logout')}}" method="post">
                                     @csrf

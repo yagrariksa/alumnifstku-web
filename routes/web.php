@@ -35,6 +35,13 @@ Route::prefix('dashboard')->middleware('auth')->group(function() {
 });
 
 Route::prefix('my')->middleware('auth')->group(function(){
+    Route::get('/','UserController@admin')->name('my.index');
+    Route::get('/admin','UserController@admin')->name('my.admin');
+    Route::get('/log','UserController@log')->name('my.log');
+    Route::get('/edit','UserController@edit')->name('my.edit');
+    Route::post('/add','UserController@add')->name('my.addadmin');
+    Route::post('/update','UserController@update')->name('my.update');
+    Route::post('/cpass','UserController@changePassword')->name('my.cpass');
 });
 
 Route::prefix('alumni')->middleware('auth')->group(function() {
