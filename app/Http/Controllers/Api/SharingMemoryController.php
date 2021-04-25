@@ -20,8 +20,8 @@ class SharingMemoryController extends Controller
 {
 
     public function postMemory(Request $request)
-    {        
-        
+    {
+
         $validator = Validator::make($request->all(), [
             'foto' => 'image:jpg,jpeg,png,webp|max:5000|mimes:jpg,png,jpeg,webp',
             'deskripsi' => 'string'
@@ -35,12 +35,12 @@ class SharingMemoryController extends Controller
                 'data' => []
             ], 400);
         }
-                
 
-        if ($request->hasFile('foto')) {                        
-            $url = Storage::put('/',$request->foto);            
+
+        if ($request->hasFile('foto')) {
+            $url = Storage::put('/', $request->foto);
             $sharing = SharingAlumni::create([
-                'foto' => url('/api/pic?pic_url=').$url,
+                'foto' => url('/api/pic?pic_url=') . $url,
                 'deskripsi' => $request->deskripsi,
                 'alumni_id' => auth()->user()->id,
             ]);
@@ -69,7 +69,7 @@ class SharingMemoryController extends Controller
                 'message' => 'Post tidak ditemukan.',
                 'data' => []
             ], 404);
-        }        
+        }
 
         $validator = Validator::make($request->all(), [
             'foto' => 'image:jpg,jpeg,png,webp|max:5000|mimes:jpg,png,jpeg,webp',
@@ -85,15 +85,15 @@ class SharingMemoryController extends Controller
             ], 400);
         }
 
-        if ($request->hasFile('foto')) {                        
+        if ($request->hasFile('foto')) {
 
             /* remove old files first */
-            $filename = explode('=',$post->foto)[1];            
+            $filename = explode('=', $post->foto)[1];
             Storage::delete($filename);
 
-            $url = Storage::put('/',$request->foto);            
+            $url = Storage::put('/', $request->foto);
             $post->update([
-                'foto' => url('/api/pic?pic_url=').$url
+                'foto' => url('/api/pic?pic_url=') . $url
             ]);
         }
 
@@ -108,7 +108,6 @@ class SharingMemoryController extends Controller
             'message' => 'Post anda berhasil diperbarui',
             'data' => $post
         ], 200);
-        
     }
 
     public function removeMemory($id)
@@ -123,7 +122,7 @@ class SharingMemoryController extends Controller
         }
 
         /* remove file first */
-        $filename = explode('=',$post->foto)[1];            
+        $filename = explode('=', $post->foto)[1];
         Storage::delete($filename);
 
         $post->delete();
@@ -132,16 +131,15 @@ class SharingMemoryController extends Controller
             'message' => 'Posting anda berhasil dihapus.',
             'data' => []
         ], 200);
-
     }
 
     public function myPost()
     {
         $post = SharingAlumni::where('alumni_id', auth()->user()->id)
-                             ->with(['alumni', 'tag', 'likes', 'comment'])
-                             ->orderBy('created_at', 'desc')
-                             ->get();
-        
+            ->with(['alumni', 'tag', 'likes', 'comment'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return response()->json([
             'success' => true,
             'message' => 'Permintaan anda berhasil.',
@@ -152,19 +150,27 @@ class SharingMemoryController extends Controller
     public function timeline()
     {
         $sharing = SharingAlumni::with(['alumni', 'tag', 'likes', 'comment', 'alumni.biodata'])
-                                ->orderBy('created_at', 'desc')
-                                ->get();
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        if (sizeof($sharing) < 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Tidak Ditemukan!',
+                'data' => []
+            ], 404);
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'Permintaan berhasil.',
             'data' => $sharing
         ], 200);
-    }    
+    }
 
     public function detail($id)
-    {        
-        $post = SharingAlumni::find($id);        
+    {
+        $post = SharingAlumni::find($id);
         if (!$post) {
             return response()->json([
                 'success' => false,
@@ -177,13 +183,14 @@ class SharingMemoryController extends Controller
             'success' => true,
             'message' => 'Permintaan anda berhasil.',
             'data' => $post->load([
-                'alumni', 
-                'tag', 
-                'likes', 
-                'comment' => function($query) {
+                'alumni',
+                'tag',
+                'likes',
+                'comment' => function ($query) {
                     $query->orderBy('created_at', 'desc');
-                }, 
-                'alumni.biodata'])
+                },
+                'alumni.biodata'
+            ])
         ], 200);
     }
 
@@ -197,7 +204,7 @@ class SharingMemoryController extends Controller
                 'data' => []
             ], 404);
         }
-        
+
         $attr = PostLike::create([
             'sharing_alumni_id' => $id,
             'alumni_id' => auth()->user()->id
@@ -215,9 +222,9 @@ class SharingMemoryController extends Controller
         // bikin record data notif
         $notif = NotifAlumni::create(
             [
-                'text' => $penyuka->nama . " menyukai postingan anda", 
-                'is_read' => false, 
-                'alumni_id' => $alumni->id, 
+                'text' => $penyuka->nama . " menyukai postingan anda",
+                'is_read' => false,
+                'alumni_id' => $alumni->id,
                 'sharing_id' => $sharing->id,
             ]
         );
@@ -227,12 +234,12 @@ class SharingMemoryController extends Controller
             'success' => true,
             'message' => 'Permintaan anda berhasil.',
             'data' => $post->load([
-                'alumni', 
-                'tag', 
-                'likes', 
-                'comment' => function($query) {
+                'alumni',
+                'tag',
+                'likes',
+                'comment' => function ($query) {
                     $query->orderBy('created_at', 'desc');
-                }, 
+                },
                 'alumni.biodata'
             ])
         ], 201);
@@ -247,7 +254,7 @@ class SharingMemoryController extends Controller
                 'message' => 'Posting tidak ditemukan.',
                 'data' => []
             ], 404);
-        }        
+        }
 
         $attr = PostLike::where('sharing_alumni_id', $id)->where('alumni_id', auth()->user()->id)->first();
         if (!$attr) {
@@ -263,13 +270,14 @@ class SharingMemoryController extends Controller
             'success' => true,
             'message' => 'Permintaan anda berhasil.',
             'data' => $post->load([
-                'alumni', 
-                'tag', 
-                'likes', 
-                'comment' => function($query) {
+                'alumni',
+                'tag',
+                'likes',
+                'comment' => function ($query) {
                     $query->orderBy('created_at', 'desc');
-                }, 
-                'alumni.biodata'])
+                },
+                'alumni.biodata'
+            ])
         ], 200);
     }
 
@@ -281,7 +289,7 @@ class SharingMemoryController extends Controller
      */
     public function comments($id)
     {
-        $post = SharingAlumni::with(['comment' => function($query) {
+        $post = SharingAlumni::with(['comment' => function ($query) {
             $query->orderBy('created_at', 'desc');
         }])->find($id);
 
@@ -291,9 +299,9 @@ class SharingMemoryController extends Controller
                 'message' => 'Posting tidak ditemukan.',
                 'data' => []
             ], 404);
-        }        
-        
-        
+        }
+
+
 
         return response()->json([
             'success' => true,
@@ -304,7 +312,7 @@ class SharingMemoryController extends Controller
 
     public function postComment(Request $request, $id)
     {
-        $post = SharingAlumni::with(['comment' => function($query) {
+        $post = SharingAlumni::with(['comment' => function ($query) {
             $query->orderBy('created_at', 'desc');
         }])->find($id);
         if (!$post) {
@@ -316,7 +324,7 @@ class SharingMemoryController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'text' => 'required|string|max:255',            
+            'text' => 'required|string|max:255',
         ]);
 
         if ($validator->fails()) {
@@ -340,9 +348,9 @@ class SharingMemoryController extends Controller
         // bikin record data notif
         $notif = NotifAlumni::create(
             [
-                'text' => $penyuka->nama . " mengomentari postingan anda", 
-                'is_read' => false, 
-                'alumni_id' => auth()->user()->id, 
+                'text' => $penyuka->nama . " mengomentari postingan anda",
+                'is_read' => false,
+                'alumni_id' => auth()->user()->id,
                 'sharing_id' => $sharing->id,
             ]
         );
@@ -370,7 +378,7 @@ class SharingMemoryController extends Controller
 
     public function removeComment($id, $commentId)
     {
-        $post = SharingAlumni::with(['comment' => function($query) {
+        $post = SharingAlumni::with(['comment' => function ($query) {
             $query->orderBy('created_at', 'desc');
         }])->find($id);
         if (!$post) {
@@ -404,7 +412,6 @@ class SharingMemoryController extends Controller
             'message' => 'Anda tidak berhak melakukan operasi ini.',
             'data' => []
         ], 403);
-
     }
 
     /**
@@ -414,7 +421,7 @@ class SharingMemoryController extends Controller
     private function mergeErrorMsg($msg)
     {
         $result = [];
-        foreach ($msg as $err) {            
+        foreach ($msg as $err) {
             foreach ($err as $e) {
                 array_push($result, $e);
             }
@@ -425,24 +432,23 @@ class SharingMemoryController extends Controller
     public function notif()
     {
         $notif = NotifAlumni::where('alumni_id', auth()->user()->id)
-                            ->with('alumni', 'post')
-                            ->orderBy('created_at', 'desc')
-                            ->get();
+            ->with('alumni', 'post')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         $hey = NotifAlumni::where('alumni_id', auth()->user()->id)
-                        ->where('is_read', false)
-                        ->get();
+            ->where('is_read', false)
+            ->get();
 
-        foreach($hey as $h)
-        {
+        foreach ($hey as $h) {
             $h->is_read = true;
             $h->save();
         }
-                            
+
         return response()->json([
             'success' => true,
             'message' => 'Permintaan anda berhasil.',
             'data' => $notif
-        ], 200);                        
+        ], 200);
     }
 }

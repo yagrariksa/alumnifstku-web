@@ -118,7 +118,8 @@ MAIN CONTENT LAYOUT
                                         </div> --}}
                                         </div>
                                         <div class="block-content">
-                                            <p>Link Reset-Password berhasil dikirim ke Email Anda</p>
+                                            <p>{{session('status')}}</p>
+                                            <p>Harap cek di bagian spam jika di kotak masuk utama tidak ada</p>
                                         </div>
                                     </div>
                                 </div>

@@ -91,8 +91,11 @@ class LokerController extends Controller
             'deadline'   => (string)$request->deadline . " 00:00:00",
         ]);
         
-        $this->sendemail($jurusan,$loker);
+        $res = $this->sendemail($jurusan,$loker);
 
+        if(!$res){
+            return redirect()->route('loker.index')->with('error','gagal');
+        }
         flash('success')->success();
         return redirect()->route('loker.index');
     }
@@ -123,8 +126,12 @@ class LokerController extends Controller
     
                 // masukin data ke Email
                 Mail::to($email)->send(new LokerMail($data));
+                if(count(Mail::failures()) > 0){
+                    return false;
+                }
             }
         }
+        return true;
     }
 
     public function view($id)
@@ -260,7 +267,10 @@ class LokerController extends Controller
             ]);
         }
 
-        $this->sendemail($jurusan,$loker);
+        $res = $this->sendemail($jurusan,$loker);
+        if(!$res){
+            return redirect()->route('loker.index')->with('error','gagal');
+        }
 
         flash('Success')->success();
         return redirect()->route('loker.index');

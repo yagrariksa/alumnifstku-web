@@ -28,6 +28,13 @@ class NewsController extends Controller
 
         $news = $news->orderBy('created_at', $order)->get();
 
+        if (sizeof($news) < 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Tidak Ditemukan!',
+                'data' => []
+            ], 404);
+        }
         return response()->json([
             'success' => true,
             'message' => 'Permintaan berhasil.',

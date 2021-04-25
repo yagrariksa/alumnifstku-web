@@ -151,7 +151,7 @@ class AuthController extends Controller
             
             return response()->json([
                 'success' => false,
-                'message' => $msg,
+                'message' => $msg . ' Harap cek di bagian spam apabila email tidak ditemukan di kotak masuk utama',
                 'data' => []
             ], 400);
         }

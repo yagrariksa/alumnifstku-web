@@ -10,9 +10,10 @@ class LokerController extends Controller
 {
     public function list(Request $request)
     {
-        $loker = Loker::with('uploader');
+        // $loker = Loker::with('uploader');
                     //   ->orderBy('created_at', 'desc')
                     //   ->get();
+        $loker = Loker::orderBy('created_at','desc');
 
         // filter function
         if ($request->filter) {
@@ -44,6 +45,14 @@ class LokerController extends Controller
         }
 
         $loker = $loker->orderBy('created_at', $order)->get();
+
+        if (sizeof($loker) < 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data Tidak Ditemukan!',
+                'data' => []
+            ], 404);
+        }
 
         return response()->json([
             'success' => true,
