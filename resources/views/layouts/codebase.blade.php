@@ -171,9 +171,9 @@
                                 <span class="sidebar-mini-visible">AL</span>
                                 <span class="sidebar-mini-hidden">Alumni</span>
                             </li>
-                            {{-- <li>
+                            <li>
                                 <a class="nav-item-sidebar" id="alumni-create" href="{{route('alumni.create')}}"><i class="si si-user-follow"></i><span class="sidebar-mini-hide">Tambah Alumni</span></a>
-                            </li> --}}
+                            </li>
                             <li>
                                 <a class="nav-item-sidebar" id="alumni-index" href="{{route('alumni.index')}}"><i class="si si-graduation"></i><span class="sidebar-mini-hide">Daftar Alumni</span></a>
                             </li>
